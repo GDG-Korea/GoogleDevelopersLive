@@ -2,10 +2,22 @@
 <resources>
 
     <string name="app_name">Google Developers Live</string>
-    <string name="title_section3">Section 3</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section1">Section 1</string>
-    <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
+
+    <string-array name="category">
+        <item>All</item>
+        <item>ads</item>
+        <item>android</item>
+        <item>chrome</item>
+        <item>cloud</item>
+        <item>commerce</item>
+        <item>drive</item>
+        <item>generic</item>
+        <item>tv</item>
+        <item>plus</item>
+        <item>maps</item>
+        <item>primetime</item>
+        <item>youtube</item>
+    </string-array>
 
 </resources>

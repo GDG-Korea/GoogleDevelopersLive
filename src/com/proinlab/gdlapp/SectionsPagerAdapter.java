@@ -13,36 +13,33 @@ import android.support.v4.app.FragmentPagerAdapter;
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
 	private Context mContext;
-	
+	private String[] catelist;
+
 	public SectionsPagerAdapter(FragmentManager fm, Context context) {
 		super(fm);
 		mContext = context;
+		catelist = mContext.getResources().getStringArray(R.array.category);
 	}
 
 	@Override
 	public Fragment getItem(int position) {
 		Fragment fragment = new ListFragment();
 		Bundle args = new Bundle();
-		args.putInt(ListFragment.ARG_SECTION_NUMBER, position + 1);
+		args.putString(ListFragment.ARG_SECTION_CATE, catelist[position]);
 		fragment.setArguments(args);
 		return fragment;
 	}
 
 	@Override
 	public int getCount() {
-		return 3;
+		return catelist.length;
 	}
 
 	@Override
 	public CharSequence getPageTitle(int position) {
-		switch (position) {
-		case 0:
-			return mContext.getString(R.string.title_section1);
-		case 1:
-			return mContext.getString(R.string.title_section2);
-		case 2:
-			return mContext.getString(R.string.title_section3);
-		}
-		return null;
+		if (position < catelist.length)
+			return catelist[position];
+		else
+			return null;
 	}
 }
