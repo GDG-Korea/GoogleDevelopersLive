@@ -81,7 +81,7 @@ public class ListFragment extends Fragment {
 
 					htmldata = HtmlToString(url, "utf-8");
 					if (htmldata != null) {
-						if (htmldata.indexOf("<ol class=") != -1) {
+						if (htmldata.indexOf("paging-cursor") != -1) {
 							htmldata = htmldata.substring(
 									htmldata.indexOf("<ol class="),
 									htmldata.indexOf("paging-cursor"));
