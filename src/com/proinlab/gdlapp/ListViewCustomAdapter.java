@@ -10,7 +10,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -42,8 +41,9 @@ class ListViewCustomAdapter extends BaseAdapter implements OnClickListener {
 		arSrc = aarSrc;
 		layout = R.layout.listview_contents;
 
-		Thumbnail = new ImageView[arSrc.size()];
-		bitmap = new Bitmap[arSrc.size()];
+		Thumbnail = new ImageView[10000];
+		bitmap = new Bitmap[10000];
+
 	}
 
 	public int getCount() {

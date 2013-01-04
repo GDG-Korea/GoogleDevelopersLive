@@ -14,9 +14,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -29,11 +32,15 @@ public class ListFragment extends Fragment {
 
 	private ListViewCustomAdapter mAdapter;
 	private ListView mListView;
+	private View footer;
 	private ArrayList<ArrayList<String>> arList;
+	private LayoutInflater mInflater;
 
 	private static final int THREAD_HTMLPARSING = 0;
 
-	private int page = 1;
+	private String nextpagecode = "1";
+
+	private boolean mLockListView;
 
 	public ListFragment() {
 	}
@@ -44,7 +51,36 @@ public class ListFragment extends Fragment {
 		category = getArguments().getString(ARG_SECTION_CATE);
 		arList = new ArrayList<ArrayList<String>>();
 		mListView = new ListView(getActivity());
-		downloadListThread(category, page);
+		mInflater = (LayoutInflater) getActivity().getSystemService(
+				getActivity().LAYOUT_INFLATER_SERVICE);
+		footer = mInflater.inflate(R.layout.footer, null);
+		mListView.addFooterView(footer);
+	
+		mAdapter = new ListViewCustomAdapter(getActivity(), arList);
+		mListView.setAdapter(mAdapter);
+
+		downloadListThread(category);
+
+		mLockListView = true;
+
+		mListView.setOnScrollListener(new OnScrollListener() {
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem,
+					int visibleItemCount, int totalItemCount) {
+				int count = totalItemCount - visibleItemCount;
+
+				if (firstVisibleItem >= count && totalItemCount != 0
+						&& mLockListView == false
+						&& !nextpagecode.equals("none")) {
+					downloadListThread(category);
+				}
+			}
+
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {
+			}
+		});
+
 		return mListView;
 	}
 
@@ -54,15 +90,19 @@ public class ListFragment extends Fragment {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case THREAD_HTMLPARSING:
+				mAdapter.notifyDataSetChanged();
 				isThreadActive = false;
-				mAdapter = new ListViewCustomAdapter(getActivity(), arList);
-				mListView.setAdapter(mAdapter);
+				mLockListView = false;
+				htmldata = null;
+				if(nextpagecode.equals("none"))
+					mListView.removeFooterView(footer);
+				
 				break;
 			}
 		}
 	};
 
-	private boolean downloadListThread(final String cate, final int page) {
+	private boolean downloadListThread(final String cate) {
 		if (isThreadActive) {
 			return false;
 		} else {
@@ -72,24 +112,42 @@ public class ListFragment extends Fragment {
 					isThreadActive = true;
 					String url;
 					if (cate.equals(getActivity().getResources()
-							.getStringArray(R.array.category)[0]))
-						url = "https://developers.google.com/live/browse#p="
-								+ Integer.toString(page);
-					else
-						url = "https://developers.google.com/live/" + cate
-								+ "/browse#p=" + Integer.toString(page);
+							.getStringArray(R.array.category)[0])) {
+						if (nextpagecode.equals("1"))
+							url = "https://developers.google.com/live/browse";
+						else
+							url = "https://developers.google.com/live/browse?c="
+									+ nextpagecode;
+					} else {
+						if (nextpagecode.equals("1"))
+							url = "https://developers.google.com/live/" + cate
+									+ "/browse";
+						else
+							url = "https://developers.google.com/live/" + cate
+									+ "/browse?c=" + nextpagecode;
+					}
+					Log.i("TAG", url);
 
 					htmldata = HtmlToString(url, "utf-8");
 					if (htmldata != null) {
-						if (htmldata.indexOf("paging-cursor") != -1) {
+						if (htmldata.indexOf("<a href=\"?c=") != -1) {
+							nextpagecode = htmldata.substring(htmldata
+									.indexOf(("<a href=\"?c=")) + 12);
+							nextpagecode = nextpagecode.substring(0,
+									nextpagecode.indexOf("\">"));
+						} else
+							nextpagecode = "none";
+
+						if (htmldata
+								.indexOf("<div id=\"create-dialog\" class=\"hidden\">") != -1) {
 							htmldata = htmldata.substring(
 									htmldata.indexOf("<ol class="),
-									htmldata.indexOf("paging-cursor"));
+									htmldata.indexOf("<div id=\"create-dialog\" class=\"hidden\">"));
 							while (htmldata.indexOf("<li>") != -1) {
 								htmldata = htmldata.substring(htmldata
 										.indexOf("<li>") + 4);
 								String link, thumbnail, title, date;
-								
+
 								link = "https://developers.google.com"
 										+ htmldata.substring(
 												htmldata.indexOf("<a href=") + 9,
@@ -101,7 +159,7 @@ public class ListFragment extends Fragment {
 										+ htmldata.substring(
 												htmldata.indexOf("src=\"") + 5,
 												htmldata.indexOf("\" />"));
-		
+
 								htmldata = htmldata.substring(htmldata
 										.indexOf("\" />") + 4);
 								title = htmldata.substring(0,
@@ -117,6 +175,8 @@ public class ListFragment extends Fragment {
 								else
 									date = htmldata.substring(0,
 											htmldata.indexOf("</li>"));
+								if(date.indexOf("<div")!=-1)
+									date = date.substring(0, date.indexOf("<div"));
 								date = REMOVE_UNNECESSORY(date);
 
 								ArrayList<String> data = new ArrayList<String>();
@@ -124,7 +184,6 @@ public class ListFragment extends Fragment {
 								data.add(date);
 								data.add(thumbnail);
 								data.add(link);
-
 								arList.add(data);
 							}
 						}
@@ -151,7 +210,6 @@ public class ListFragment extends Fragment {
 			HttpResponse response = httpclient.execute(request);
 			HttpEntity entity = response.getEntity();
 			htmlSource = EntityUtils.toString(entity, incoding);
-			page++;
 		} catch (Exception e) {
 			htmlSource = null;
 		}
