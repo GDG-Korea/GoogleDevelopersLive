@@ -1,15 +1,26 @@
 package com.proinlab.gdlapp;
 
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+
+import com.google.android.youtube.player.YouTubeIntents;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,7 +28,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 @SuppressLint("HandlerLeak")
 class ListViewCustomAdapter extends BaseAdapter implements OnClickListener {
@@ -85,21 +95,75 @@ class ListViewCustomAdapter extends BaseAdapter implements OnClickListener {
 
 	public void onClick(View v) {
 		int position = (Integer) v.getTag();
+		
 		ArrayList<String> data = getItem(position);
-		Toast.makeText(maincon, data.get(ARRAY_INDEX_LINK), Toast.LENGTH_SHORT)
-				.show();
+		MainActivity.alert.show();
+		getYouTubeUrl(data);
+//		Intent intent = new Intent(maincon, Contents.class);
+//		intent.putExtra(Contents.EXTRAS_CONTENTS_LINK,
+//				data.get(ARRAY_INDEX_LINK));
+//		intent.putExtra(Contents.EXTRAS_CONTENTS_TITLE,
+//				data.get(ARRAY_INDEX_TITLE));
+//		intent.putExtra(Contents.EXTRAS_CONTENTS_DATE,
+//				data.get(ARRAY_INDEX_DATE));
+//		intent.putExtra(Contents.EXTRAS_CONTENTS_THUMBNAIL,
+//				data.get(ARRAY_INDEX_THUMBNAIL));
+//		maincon.startActivity(intent);
 	}
 
+	private String youtubelink;
+	private Handler mHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			Intent intent = YouTubeIntents.createPlayVideoIntentWithOptions(
+					maincon, youtubelink, true, false);
+			maincon.startActivity(intent);
+			
+			if(MainActivity.alert.isShowing())
+				MainActivity.alert.dismiss();
+		}
+	};
+	
+	private void getYouTubeUrl(final ArrayList<String> data) {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+
+				String htmldata = HtmlToString(data.get(ARRAY_INDEX_LINK), "utf-8");
+
+				if (htmldata != null)
+					if (htmldata
+							.indexOf("<iframe id=\"ytplayer\" type=\"text/html\"") != -1) {
+						htmldata = htmldata.substring(htmldata
+								.indexOf("<iframe id=\"ytplayer\" type=\"text/html\""));
+						youtubelink = htmldata.substring(htmldata
+								.indexOf("src=\"") + 5);
+						youtubelink = "https:"
+								+ youtubelink.substring(0,
+										youtubelink.indexOf("\""));
+						youtubelink = youtubelink.substring(youtubelink
+								.lastIndexOf("/") + 1);
+						Log.i("TAG", youtubelink);
+					}
+
+				mHandler.post(new Runnable() {
+					public void run() {
+						mHandler.sendEmptyMessage(0);
+					}
+				});
+
+			}
+		}).start();
+	}
+	
 	private final Handler handler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
 			if (bitmap == null)
 				return;
 			Thumbnail[msg.what].setImageBitmap(bitmap[msg.what]);
-
 		}
 	};
-
+	
 	private void process(final String url, final int position) {
 		new Thread() {
 			@Override
@@ -120,4 +184,19 @@ class ListViewCustomAdapter extends BaseAdapter implements OnClickListener {
 		}.start();
 	}
 
+	private String HtmlToString(String addr, String incoding) {
+		DefaultHttpClient httpclient = new DefaultHttpClient();
+		String htmlSource;
+		try {
+			HttpGet request = new HttpGet();
+			request.setURI(new URI(addr));
+			HttpResponse response = httpclient.execute(request);
+			HttpEntity entity = response.getEntity();
+			htmlSource = EntityUtils.toString(entity, incoding);
+		} catch (Exception e) {
+			htmlSource = null;
+		}
+		return htmlSource;
+	}
+	
 }

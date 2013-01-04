@@ -1,26 +1,22 @@
 package com.proinlab.gdlapp;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
+import android.view.View;
+import android.widget.LinearLayout;
 
 public class MainActivity extends FragmentActivity implements
 		ActionBar.TabListener {
 
-	/**
-	 * The {@link android.support.v4.view.PagerAdapter} that will provide
-	 * fragments for each of the sections. We use a
-	 * {@link android.support.v4.app.FragmentPagerAdapter} derivative, which
-	 * will keep every loaded fragment in memory. If this becomes too memory
-	 * intensive, it may be best to switch to a
-	 * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-	 */
 	private SectionsPagerAdapter mSectionsPagerAdapter;
 
 	private ViewPager mViewPager;
+	public static AlertDialog alert = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +45,14 @@ public class MainActivity extends FragmentActivity implements
 					.setText(mSectionsPagerAdapter.getPageTitle(i))
 					.setTabListener(this));
 		}
+		
+		// YouTube Dialog
+		LinearLayout linear = (LinearLayout) View.inflate(this,
+				R.layout.loading_dialog, null);
+		AlertDialog.Builder alt_bld = new AlertDialog.Builder(this);
+		alt_bld.setView(linear);
+		alert = alt_bld.create();
+		alert.setCancelable(false);
 	}
 
 	@Override

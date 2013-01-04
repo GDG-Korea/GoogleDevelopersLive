@@ -10,6 +10,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -51,8 +52,9 @@ public class ListFragment extends Fragment {
 		category = getArguments().getString(ARG_SECTION_CATE);
 		arList = new ArrayList<ArrayList<String>>();
 		mListView = new ListView(getActivity());
+		getActivity();
 		mInflater = (LayoutInflater) getActivity().getSystemService(
-				getActivity().LAYOUT_INFLATER_SERVICE);
+				Context.LAYOUT_INFLATER_SERVICE);
 		footer = mInflater.inflate(R.layout.footer, null);
 		mListView.addFooterView(footer);
 	
