@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Google Developers Live</string>
-    <string name="menu_settings">Settings</string>
+    <string name="menu_developre">Developer</string>
 
     <string-array name="category">
         <item>All</item>

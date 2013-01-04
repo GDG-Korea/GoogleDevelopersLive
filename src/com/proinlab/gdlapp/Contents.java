@@ -10,26 +10,26 @@ import org.apache.http.util.EntityUtils;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
-import android.content.Intent;
+import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.android.youtube.player.YouTubeIntents;
+// this Activity is not visible
+// you want to apply YouTube SDK more in this.
 
 @SuppressLint("HandlerLeak")
-public class Contents extends FragmentActivity {
+public class Contents extends Activity {
 
 	public static final String EXTRAS_CONTENTS_LINK = "EXTRAS_CONTENTS_LINK";
 	public static final String EXTRAS_CONTENTS_TITLE = "EXTRAS_CONTENTS_TITLE";
 	public static final String EXTRAS_CONTENTS_DATE = "EXTRAS_CONTENTS_DATE";
 	public static final String EXTRAS_CONTENTS_THUMBNAIL = "EXTRAS_CONTENTS_THUMBNAIL";
 
-	private String youtubelink;
+	private String youtubelink; // youtube id : likes "HoUdWBzUZ-M"
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -39,19 +39,18 @@ public class Contents extends FragmentActivity {
 		final ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 
+		// get YouTube Id from intent url
 		getYouTubeUrl();
 
 	}
 
 	private Handler mHandler = new Handler() {
 		public void handleMessage(Message msg) {
-			Intent intent = YouTubeIntents.createPlayVideoIntentWithOptions(
-					Contents.this, youtubelink, true, false);
-			startActivity(intent);
-			finish();
+			// start at end of thread
 		}
 	};
 
+	
 	private void getYouTubeUrl() {
 		new Thread(new Runnable() {
 			@Override

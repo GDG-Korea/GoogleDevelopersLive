@@ -22,26 +22,28 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ListView;
-import android.widget.TextView;
 
+// this Fragment act in MainActivity for tab
 @SuppressLint("HandlerLeak")
 public class ListFragment extends Fragment {
 
 	public static final String ARG_SECTION_CATE = "ARG_SECTION_CATE";
-	private boolean isThreadActive = false;
+	private boolean isThreadActive = false; // if thread already activate
 	private String category;
 
 	private ListViewCustomAdapter mAdapter;
 	private ListView mListView;
 	private View footer;
-	private ArrayList<ArrayList<String>> arList;
+	private ArrayList<ArrayList<String>> arList; // refer to
+													// ListViewCustomAdapter
 	private LayoutInflater mInflater;
+	
+	private String htmldata; // parsing string
 
 	private static final int THREAD_HTMLPARSING = 0;
-
-	private String nextpagecode = "1";
-
-	private boolean mLockListView;
+	private String nextpagecode = "1"; // if this code is "none", no more
+										// loading and remove footer.
+	private boolean mLockListView; // unactivate when loading
 
 	public ListFragment() {
 	}
@@ -57,7 +59,7 @@ public class ListFragment extends Fragment {
 				Context.LAYOUT_INFLATER_SERVICE);
 		footer = mInflater.inflate(R.layout.footer, null);
 		mListView.addFooterView(footer);
-	
+
 		mAdapter = new ListViewCustomAdapter(getActivity(), arList);
 		mListView.setAdapter(mAdapter);
 
@@ -86,8 +88,7 @@ public class ListFragment extends Fragment {
 		return mListView;
 	}
 
-	TextView tv;
-	String htmldata;
+	// update list
 	private Handler mHandler = new Handler() {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
@@ -96,14 +97,15 @@ public class ListFragment extends Fragment {
 				isThreadActive = false;
 				mLockListView = false;
 				htmldata = null;
-				if(nextpagecode.equals("none"))
+				if (nextpagecode.equals("none"))
 					mListView.removeFooterView(footer);
-				
+
 				break;
 			}
 		}
 	};
 
+	//  loading list
 	private boolean downloadListThread(final String cate) {
 		if (isThreadActive) {
 			return false;
@@ -177,8 +179,9 @@ public class ListFragment extends Fragment {
 								else
 									date = htmldata.substring(0,
 											htmldata.indexOf("</li>"));
-								if(date.indexOf("<div")!=-1)
-									date = date.substring(0, date.indexOf("<div"));
+								if (date.indexOf("<div") != -1)
+									date = date.substring(0,
+											date.indexOf("<div"));
 								date = REMOVE_UNNECESSORY(date);
 
 								ArrayList<String> data = new ArrayList<String>();

@@ -3,10 +3,12 @@ package com.proinlab.gdlapp;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -25,7 +27,6 @@ public class MainActivity extends FragmentActivity implements
 
 		final ActionBar actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
 		mSectionsPagerAdapter = new SectionsPagerAdapter(
 				getSupportFragmentManager(), this);
 
@@ -61,6 +62,12 @@ public class MainActivity extends FragmentActivity implements
 		return true;
 	}
 
+	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent intent = new Intent(this, DevInfo.class);
+		startActivity(intent);
+		return true;
+	}
+	
 	@Override
 	public void onTabSelected(ActionBar.Tab tab,
 			FragmentTransaction fragmentTransaction) {
