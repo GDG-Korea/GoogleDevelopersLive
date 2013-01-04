@@ -51,6 +51,10 @@ public class ListFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		
+		Log.i("TAG", "pragment start");
+		nextpagecode = "1";
+		
 		category = getArguments().getString(ARG_SECTION_CATE);
 		arList = new ArrayList<ArrayList<String>>();
 		mListView = new ListView(getActivity());
