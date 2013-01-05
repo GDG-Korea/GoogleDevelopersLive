@@ -3,6 +3,7 @@
 
     <string name="app_name">Google Developers Live</string>
     <string name="menu_developre">Developer</string>
+    <string name="menu_category">Category</string>
 
     <string-array name="category">
         <item>All</item>

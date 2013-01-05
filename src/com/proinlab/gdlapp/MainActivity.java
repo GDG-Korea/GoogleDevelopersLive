@@ -3,6 +3,7 @@ package com.proinlab.gdlapp;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -27,6 +28,7 @@ public class MainActivity extends FragmentActivity implements
 
 		final ActionBar actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		actionBar.setDisplayShowCustomEnabled(true);
 		mSectionsPagerAdapter = new SectionsPagerAdapter(
 				getSupportFragmentManager(), this);
 
@@ -46,7 +48,7 @@ public class MainActivity extends FragmentActivity implements
 					.setText(mSectionsPagerAdapter.getPageTitle(i))
 					.setTabListener(this));
 		}
-		
+
 		// YouTube Dialog
 		LinearLayout linear = (LinearLayout) View.inflate(this,
 				R.layout.loading_dialog, null);
@@ -63,11 +65,28 @@ public class MainActivity extends FragmentActivity implements
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) {
-		Intent intent = new Intent(this, DevInfo.class);
-		startActivity(intent);
-		return true;
+		switch (item.getItemId()) {
+		case R.id.menu_developer:
+			Intent intent = new Intent(this, DevInfo.class);
+			startActivity(intent);
+			return true;
+		case R.id.menu_category:
+			String[] strarr = getResources().getStringArray(R.array.category);
+			AlertDialog.Builder alt_bld = new AlertDialog.Builder(this)
+					.setItems(strarr, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							mViewPager.setCurrentItem(which);
+						}
+					});
+			AlertDialog alert = alt_bld.create();
+			alert.setCanceledOnTouchOutside(true);
+			alert.show();
+			return true;
+		}
+		return false;
 	}
-	
+
 	@Override
 	public void onTabSelected(ActionBar.Tab tab,
 			FragmentTransaction fragmentTransaction) {
@@ -83,5 +102,4 @@ public class MainActivity extends FragmentActivity implements
 	public void onTabReselected(ActionBar.Tab tab,
 			FragmentTransaction fragmentTransaction) {
 	}
-
 }
