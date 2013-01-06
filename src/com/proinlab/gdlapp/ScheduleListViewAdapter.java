@@ -61,7 +61,8 @@ class ScheduleListViewAdapter extends BaseAdapter implements OnClickListener {
 
 		Thumbnail[position] = (ImageView) convertView
 				.findViewById(R.id.schedule_content_thumbnails);
-
+		Thumbnail[position].setImageBitmap(null);
+		
 		TextView title = (TextView) convertView
 				.findViewById(R.id.schedule_content_name);
 		title.setText(arSrc.get(position).get(ARRAY_INDEX_TITLE));
