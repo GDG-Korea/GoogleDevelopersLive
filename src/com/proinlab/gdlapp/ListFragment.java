@@ -37,7 +37,7 @@ public class ListFragment extends Fragment {
 	private ArrayList<ArrayList<String>> arList; // refer to
 													// ListViewCustomAdapter
 	private LayoutInflater mInflater;
-	
+
 	private String htmldata; // parsing string
 
 	private static final int THREAD_HTMLPARSING = 0;
@@ -51,14 +51,13 @@ public class ListFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		
-		Log.i("TAG", "pragment start");
+
 		nextpagecode = "1";
-		
+
 		category = getArguments().getString(ARG_SECTION_CATE);
 		arList = new ArrayList<ArrayList<String>>();
 		mListView = new ListView(getActivity());
-		getActivity();
+
 		mInflater = (LayoutInflater) getActivity().getSystemService(
 				Context.LAYOUT_INFLATER_SERVICE);
 		footer = mInflater.inflate(R.layout.footer, null);
@@ -109,7 +108,7 @@ public class ListFragment extends Fragment {
 		}
 	};
 
-	//  loading list
+	// loading list
 	private boolean downloadListThread(final String cate) {
 		if (isThreadActive) {
 			return false;
@@ -225,18 +224,18 @@ public class ListFragment extends Fragment {
 		return htmlSource;
 	}
 
-	public String REMOVE_UNNECESSORY(String data) {
+	private String REMOVE_UNNECESSORY(String data) {
 		data = data.replaceAll(System.getProperty("line.separator"), "");
-		data = data.replaceAll("<br>", ":");
-		data = data.replaceAll("</ br>", ":");
-		data = data.replaceAll("</br>", ":");
-		data = data.replaceAll("<br/>", ":");
-		data = data.replaceAll("<br />", ":");
-		data = data.replaceAll("<BR>", ":");
-		data = data.replaceAll("</ BR>", ":");
-		data = data.replaceAll("</BR>", ":");
-		data = data.replaceAll("<BR/>", ":");
-		data = data.replaceAll("<BR />", ":");
+		data = data.replaceAll("<br>", "");
+		data = data.replaceAll("</ br>", "");
+		data = data.replaceAll("</br>", "");
+		data = data.replaceAll("<br/>", "");
+		data = data.replaceAll("<br />", "");
+		data = data.replaceAll("<BR>", "");
+		data = data.replaceAll("</ BR>", "");
+		data = data.replaceAll("</BR>", "");
+		data = data.replaceAll("<BR/>", "");
+		data = data.replaceAll("<BR />", "");
 
 		while (data.substring(0, 1).equals(" "))
 			data = data.substring(1);
@@ -246,6 +245,17 @@ public class ListFragment extends Fragment {
 			data = data.substring(1);
 		while (data.substring(0, 1).equals("\\p{Blank}"))
 			data = data.substring(1);
+		while (data.substring(data.length() - 1, data.length()).equals(" "))
+			data = data.substring(0, data.length() - 1);
+		while (data.substring(data.length() - 1, data.length()).equals(
+				"\\p{Space}"))
+			data = data.substring(0, data.length() - 1);
+		while (data.substring(data.length() - 1, data.length())
+				.equals("&nbsp;"))
+			data = data.substring(0, data.length() - 1);
+		while (data.substring(data.length() - 1, data.length()).equals(
+				"\\p{Blank}"))
+			data = data.substring(0, data.length() - 1);
 
 		return data;
 	}

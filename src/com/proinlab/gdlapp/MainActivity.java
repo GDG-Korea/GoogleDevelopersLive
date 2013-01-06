@@ -29,6 +29,7 @@ public class MainActivity extends FragmentActivity implements
 		final ActionBar actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		actionBar.setDisplayShowCustomEnabled(true);
+		
 		mSectionsPagerAdapter = new SectionsPagerAdapter(
 				getSupportFragmentManager(), this);
 
@@ -65,9 +66,14 @@ public class MainActivity extends FragmentActivity implements
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent intent;
 		switch (item.getItemId()) {
 		case R.id.menu_developer:
-			Intent intent = new Intent(this, DevInfo.class);
+			intent = new Intent(this, DevInfo.class);
+			startActivity(intent);
+			return true;
+		case R.id.menu_schedule:
+			intent = new Intent(this, Schedule.class);
 			startActivity(intent);
 			return true;
 		case R.id.menu_category:

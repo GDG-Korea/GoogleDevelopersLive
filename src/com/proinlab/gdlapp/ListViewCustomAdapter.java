@@ -11,8 +11,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
-import com.google.android.youtube.player.YouTubeIntents;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -20,7 +18,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,6 +25,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.android.youtube.player.YouTubeIntents;
 
 @SuppressLint("HandlerLeak")
 class ListViewCustomAdapter extends BaseAdapter implements OnClickListener {
@@ -73,7 +72,7 @@ class ListViewCustomAdapter extends BaseAdapter implements OnClickListener {
 		if (convertView == null) {
 			convertView = Inflater.inflate(layout, parent, false);
 		}
-
+		
 		Thumbnail[position] = (ImageView) convertView
 				.findViewById(R.id.listview_content_thumbnail);
 
@@ -142,7 +141,6 @@ class ListViewCustomAdapter extends BaseAdapter implements OnClickListener {
 										youtubelink.indexOf("\""));
 						youtubelink = youtubelink.substring(youtubelink
 								.lastIndexOf("/") + 1);
-						Log.i("TAG", youtubelink);
 					}
 
 				mHandler.post(new Runnable() {
