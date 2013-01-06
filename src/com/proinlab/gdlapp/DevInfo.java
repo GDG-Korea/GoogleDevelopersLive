@@ -12,7 +12,7 @@ import android.widget.Button;
 
 public class DevInfo extends Activity {
 
-	private Button emailbtn, webbtn;
+	private Button webbtn;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -21,21 +21,12 @@ public class DevInfo extends Activity {
 		final ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 
-		emailbtn = (Button) findViewById(R.id.devinfo_emailbtn);
-		emailbtn.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Uri uri = Uri.parse("mailto:proin0312@gmail.com");
-				Intent it = new Intent(Intent.ACTION_SENDTO, uri);
-				startActivity(it);
-			}
-		});
-
 		webbtn = (Button) findViewById(R.id.devinfo_webbtn);
 		webbtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Uri uri = Uri.parse("http://proinlab.com");
+				Uri uri = Uri
+						.parse("https://github.com/proin/GoogleDevelopersLive");
 				Intent it = new Intent(Intent.ACTION_VIEW, uri);
 				startActivity(it);
 			}
