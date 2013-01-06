@@ -1,99 +1,152 @@
+/*
+ * Copyright 2012 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.proinlab.gdlapp;
 
-import java.net.URI;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
-
-import android.annotation.SuppressLint;
+import android.view.ViewGroup.LayoutParams;
+import android.annotation.TargetApi;
 import android.app.ActionBar;
-import android.app.Activity;
+import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
+import android.util.AttributeSet;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
-// this Activity is not visible
-// you want to apply YouTube SDK more in this.
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerFragment;
 
-@SuppressLint("HandlerLeak")
-public class Contents extends Activity {
+@TargetApi(11)
+public class Contents extends YouTubeFailureRecoveryActivity implements
+		YouTubePlayer.OnFullscreenListener {
+
+	private ActionBarPaddedFrameLayout viewContainer;
+	private YouTubePlayerFragment playerFragment;
+
+	private String Title;
+	private String YouTubeId;
 
 	public static final String EXTRAS_CONTENTS_LINK = "EXTRAS_CONTENTS_LINK";
 	public static final String EXTRAS_CONTENTS_TITLE = "EXTRAS_CONTENTS_TITLE";
 	public static final String EXTRAS_CONTENTS_DATE = "EXTRAS_CONTENTS_DATE";
 	public static final String EXTRAS_CONTENTS_THUMBNAIL = "EXTRAS_CONTENTS_THUMBNAIL";
 
-	private String youtubelink; // youtube id : likes "HoUdWBzUZ-M"
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.contents);
 
-		final ActionBar actionBar = getActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
+		YouTubeId = getIntent().getExtras().getString(EXTRAS_CONTENTS_LINK);
+		Title = getIntent().getExtras().getString(EXTRAS_CONTENTS_TITLE);
+		
+		getActionBar().setBackgroundDrawable(new ColorDrawable(0xAA000000));
+		getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+		getActionBar().setTitle(Title);
+		getActionBar().setDisplayHomeAsUpEnabled(true);
 
-		// get YouTube Id from intent url
-		getYouTubeUrl();
+		viewContainer = (ActionBarPaddedFrameLayout) findViewById(R.id.view_container);
+		playerFragment = (YouTubePlayerFragment) getFragmentManager()
+				.findFragmentById(R.id.player_fragment);
+
+		playerFragment.initialize(DeveloperKey.DEVELOPER_KEY, this);
+		viewContainer.setActionBar(getActionBar());
 
 	}
 
-	private Handler mHandler = new Handler() {
-		public void handleMessage(Message msg) {
-			// start at end of thread
+	@Override
+	public void onInitializationSuccess(YouTubePlayer.Provider provider,
+			YouTubePlayer player, boolean wasRestored) {
+		player.setFullscreen(true);
+		player.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT);
+		player.setOnFullscreenListener(this);
+
+		if (!wasRestored) {
+			player.loadVideo(YouTubeId);
 		}
-	};
+	}
 
-	
-	private void getYouTubeUrl() {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
+	@Override
+	protected YouTubePlayer.Provider getYouTubePlayerProvider() {
+		return (YouTubePlayerFragment) getFragmentManager().findFragmentById(
+				R.id.player_fragment);
+	}
 
-				String link = getIntent().getExtras().getString(
-						EXTRAS_CONTENTS_LINK);
-				String htmldata = HtmlToString(link, "utf-8");
+	@Override
+	public void onFullscreen(boolean fullscreen) {
+		viewContainer.setEnablePadding(!fullscreen);
 
-				if (htmldata != null)
-					if (htmldata
-							.indexOf("<iframe id=\"ytplayer\" type=\"text/html\"") != -1) {
-						htmldata = htmldata.substring(htmldata
-								.indexOf("<iframe id=\"ytplayer\" type=\"text/html\""));
-						youtubelink = htmldata.substring(htmldata
-								.indexOf("src=\"") + 5);
-						youtubelink = "https:"
-								+ youtubelink.substring(0,
-										youtubelink.indexOf("\""));
-						youtubelink = youtubelink.substring(youtubelink
-								.lastIndexOf("/") + 1);
-						Log.i("TAG", youtubelink);
-					}
+		ViewGroup.LayoutParams playerParams = playerFragment.getView()
+				.getLayoutParams();
+		if (fullscreen) {
+			playerParams.width = LayoutParams.MATCH_PARENT;
+			playerParams.height = LayoutParams.MATCH_PARENT;
+		} else {
+			playerParams.width = LayoutParams.MATCH_PARENT;
+			playerParams.height = LayoutParams.WRAP_CONTENT;
+		}
+	}
 
-				mHandler.post(new Runnable() {
-					public void run() {
-						mHandler.sendEmptyMessage(0);
-					}
-				});
+	public static final class ActionBarPaddedFrameLayout extends FrameLayout {
 
-			}
-		}).start();
+		private ActionBar actionBar;
+		private boolean paddingEnabled;
+
+		public ActionBarPaddedFrameLayout(Context context) {
+			this(context, null);
+		}
+
+		public ActionBarPaddedFrameLayout(Context context, AttributeSet attrs) {
+			this(context, attrs, 0);
+		}
+
+		public ActionBarPaddedFrameLayout(Context context, AttributeSet attrs,
+				int defStyle) {
+			super(context, attrs, defStyle);
+			paddingEnabled = true;
+		}
+
+		public void setActionBar(ActionBar actionBar) {
+			this.actionBar = actionBar;
+			requestLayout();
+		}
+
+		public void setEnablePadding(boolean enable) {
+			paddingEnabled = enable;
+			requestLayout();
+		}
+
+		@Override
+		protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+			int topPadding = paddingEnabled && actionBar != null
+					&& actionBar.isShowing() ? actionBar.getHeight() : 0;
+			setPadding(0, topPadding, 0, 0);
+
+			super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+		}
+
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.activity_main, menu);
 		return true;
 	}
 
-	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			finish();
@@ -101,23 +154,6 @@ public class Contents extends Activity {
 		default:
 			return false;
 		}
-
 		return true;
 	}
-
-	private String HtmlToString(String addr, String incoding) {
-		DefaultHttpClient httpclient = new DefaultHttpClient();
-		String htmlSource;
-		try {
-			HttpGet request = new HttpGet();
-			request.setURI(new URI(addr));
-			HttpResponse response = httpclient.execute(request);
-			HttpEntity entity = response.getEntity();
-			htmlSource = EntityUtils.toString(entity, incoding);
-		} catch (Exception e) {
-			htmlSource = null;
-		}
-		return htmlSource;
-	}
-
 }

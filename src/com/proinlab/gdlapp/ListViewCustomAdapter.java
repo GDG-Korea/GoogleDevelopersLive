@@ -26,8 +26,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.youtube.player.YouTubeIntents;
-
 @SuppressLint("HandlerLeak")
 class ListViewCustomAdapter extends BaseAdapter implements OnClickListener {
 	private Context maincon;
@@ -72,11 +70,11 @@ class ListViewCustomAdapter extends BaseAdapter implements OnClickListener {
 		if (convertView == null) {
 			convertView = Inflater.inflate(layout, parent, false);
 		}
-		
+
 		Thumbnail[position] = (ImageView) convertView
 				.findViewById(R.id.listview_content_thumbnail);
 		Thumbnail[position].setImageBitmap(null);
-		
+
 		TextView title = (TextView) convertView
 				.findViewById(R.id.listview_content_name);
 		title.setText(arSrc.get(position).get(ARRAY_INDEX_TITLE));
@@ -95,40 +93,39 @@ class ListViewCustomAdapter extends BaseAdapter implements OnClickListener {
 
 	public void onClick(View v) {
 		int position = (Integer) v.getTag();
-		
+
 		ArrayList<String> data = getItem(position);
 		MainActivity.alert.show();
+		title = data.get(ARRAY_INDEX_TITLE);
 		getYouTubeUrl(data);
-//		Intent intent = new Intent(maincon, Contents.class);
-//		intent.putExtra(Contents.EXTRAS_CONTENTS_LINK,
-//				data.get(ARRAY_INDEX_LINK));
-//		intent.putExtra(Contents.EXTRAS_CONTENTS_TITLE,
-//				data.get(ARRAY_INDEX_TITLE));
-//		intent.putExtra(Contents.EXTRAS_CONTENTS_DATE,
-//				data.get(ARRAY_INDEX_DATE));
-//		intent.putExtra(Contents.EXTRAS_CONTENTS_THUMBNAIL,
-//				data.get(ARRAY_INDEX_THUMBNAIL));
-//		maincon.startActivity(intent);
+
 	}
 
-	private String youtubelink;
+	private String youtubelink, title;
 	private Handler mHandler = new Handler() {
 		public void handleMessage(Message msg) {
-			Intent intent = YouTubeIntents.createPlayVideoIntentWithOptions(
-					maincon, youtubelink, true, false);
-			maincon.startActivity(intent);
 			
-			if(MainActivity.alert.isShowing())
+//			Intent intent = YouTubeIntents.createPlayVideoIntentWithOptions(
+//					maincon, youtubelink, true, false);
+//			maincon.startActivity(intent);
+			
+			Intent intent = new Intent(maincon, Contents.class);
+			intent.putExtra(Contents.EXTRAS_CONTENTS_LINK, youtubelink);
+			intent.putExtra(Contents.EXTRAS_CONTENTS_TITLE, title);
+			maincon.startActivity(intent);
+
+			if (MainActivity.alert.isShowing())
 				MainActivity.alert.dismiss();
 		}
 	};
-	
+
 	private void getYouTubeUrl(final ArrayList<String> data) {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
 
-				String htmldata = HtmlToString(data.get(ARRAY_INDEX_LINK), "utf-8");
+				String htmldata = HtmlToString(data.get(ARRAY_INDEX_LINK),
+						"utf-8");
 
 				if (htmldata != null)
 					if (htmldata
@@ -143,9 +140,10 @@ class ListViewCustomAdapter extends BaseAdapter implements OnClickListener {
 						youtubelink = youtubelink.substring(youtubelink
 								.lastIndexOf("/") + 1);
 					}
-
+			
 				mHandler.post(new Runnable() {
 					public void run() {
+						
 						mHandler.sendEmptyMessage(0);
 					}
 				});
@@ -153,7 +151,7 @@ class ListViewCustomAdapter extends BaseAdapter implements OnClickListener {
 			}
 		}).start();
 	}
-	
+
 	private final Handler handler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
@@ -162,7 +160,7 @@ class ListViewCustomAdapter extends BaseAdapter implements OnClickListener {
 			Thumbnail[msg.what].setImageBitmap(bitmap[msg.what]);
 		}
 	};
-	
+
 	private void process(final String url, final int position) {
 		new Thread() {
 			@Override
@@ -197,5 +195,5 @@ class ListViewCustomAdapter extends BaseAdapter implements OnClickListener {
 		}
 		return htmlSource;
 	}
-	
+
 }
