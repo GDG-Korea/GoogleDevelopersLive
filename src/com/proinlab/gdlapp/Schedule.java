@@ -41,7 +41,7 @@ public class Schedule extends Activity {
 
 		final ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.setTitle("Check out our upcoming shows");
+		actionBar.setTitle("Check out upcoming shows");
 		
 		htmldata = null;
 
