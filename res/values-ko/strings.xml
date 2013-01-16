@@ -7,7 +7,6 @@
     <string name="menu_schedule">일정표</string>
     <string name="error_player">YouTubePlayer를 초기화하는 중에 에러가 발생하였습니다 (%1$s)</string>
 
-	<!-- Do not change below when you translate -->
     <string-array name="category">
         <item>All</item>
         <item>ads</item>
