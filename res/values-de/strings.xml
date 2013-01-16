@@ -7,6 +7,7 @@
     <string name="menu_schedule">Agenda</string>
     <string name="error_player">Es gab einen Fehler beim Initalisieren des YouTubePlayers (%1$s)</string>
 
+	<!-- Do not change below when you translate -->
     <string-array name="category">
         <item>All</item>
         <item>ads</item>
@@ -22,5 +23,4 @@
         <item>primetime</item>
         <item>youtube</item>
     </string-array>
-
 </resources>
