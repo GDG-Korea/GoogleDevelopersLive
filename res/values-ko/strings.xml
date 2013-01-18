@@ -1,27 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Google Developers Live</string>
+    <string name="app_name">GDLive</string>
     <string name="menu_developre">개발자</string>
     <string name="menu_category">카테고리</string>
     <string name="menu_schedule">일정표</string>
     <string name="error_player">YouTubePlayer를 초기화하는 중에 에러가 발생하였습니다 (%1$s)</string>
-
-	<!-- Do not change below when you translate -->
-    <string-array name="category">
-        <item>All</item>
-        <item>ads</item>
-        <item>android</item>
-        <item>chrome</item>
-        <item>cloud</item>
-        <item>commerce</item>
-        <item>drive</item>
-        <item>generic</item>
-        <item>tv</item>
-        <item>plus</item>
-        <item>maps</item>
-        <item>primetime</item>
-        <item>youtube</item>
-    </string-array>
+    <string name="schedule_message">다가오는 이벤트 일정</string>
 
 </resources>

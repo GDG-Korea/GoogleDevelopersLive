@@ -19,6 +19,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 		super(fm);
 		mContext = context;
 		catelist = mContext.getResources().getStringArray(R.array.category);
+
 	}
 
 	@Override

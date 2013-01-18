@@ -39,10 +39,11 @@ public class Schedule extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.schedule);
 
+		String titleStr = getResources().getString(R.string.schedule_message);
 		final ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.setTitle("Check out upcoming shows");
-		
+		actionBar.setTitle(titleStr);
+
 		htmldata = null;
 
 		arList = new ArrayList<ArrayList<String>>();

@@ -11,11 +11,4 @@
         android:orderInCategory="100"
         android:showAsAction="always"
         android:title="@string/menu_schedule"/>
-    <item
-        android:id="@+id/menu_category"
-        android:icon="@drawable/action_bar_menu"
-        android:orderInCategory="100"
-        android:showAsAction="always"
-        android:title="@string/menu_category"/>
-
 </menu>

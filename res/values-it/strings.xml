@@ -3,8 +3,8 @@
 
     <string name="app_name">GDLive</string>
     <string name="menu_developre">Developer</string>
-    <string name="menu_category">Kategorie</string>
+    <string name="menu_category">Categoria</string>
     <string name="menu_schedule">Agenda</string>
-    <string name="error_player">Es gab einen Fehler beim Initalisieren des YouTubePlayers (%1$s)</string>
-
+ <!-- <string name="error_player">Si è verificato un errore durante l'avvio di YouTubePlayer (%1$s)</string> -->
+    
 </resources>
