@@ -1,30 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Google Developers Live</string>
+    <string name="app_name">GDLive</string>
     <string name="menu_developre">Developer</string>
     <string name="menu_category">Category</string>
     <string name="menu_schedule">Schedule</string>
     <string name="error_player">There was an error initializing the YouTubePlayer (%1$s)</string>
 
-    <string-array name="category">
-        <item>All</item>
-        <item>ads</item>
-        <item>android</item>
-        <item>chrome</item>
-        <item>cloud</item>
-        <item>commerce</item>
-        <item>drive</item>
-        <item>generic</item>
-        <item>tv</item>
-        <item>plus</item>
-        <item>maps</item>
-        <item>primetime</item>
-        <item>youtube</item>
-    </string-array>
-    
     <!-- Do not change below when you translate -->
-    <string-array name="category_value">
+    <string-array name="category">
         <item>All</item>
         <item>ads</item>
         <item>android</item>

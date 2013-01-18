@@ -13,21 +13,20 @@ import android.support.v4.app.FragmentPagerAdapter;
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
 	private Context mContext;
-	private String[] catelist, catevaluelist;
+	private String[] catelist;
 
 	public SectionsPagerAdapter(FragmentManager fm, Context context) {
 		super(fm);
 		mContext = context;
 		catelist = mContext.getResources().getStringArray(R.array.category);
-		catevaluelist = mContext.getResources().getStringArray(
-				R.array.category_value);
+
 	}
 
 	@Override
 	public Fragment getItem(int position) {
 		Fragment fragment = new ListFragment();
 		Bundle args = new Bundle();
-		args.putString(ListFragment.ARG_SECTION_CATE, catevaluelist[position]);
+		args.putString(ListFragment.ARG_SECTION_CATE, catelist[position]);
 		fragment.setArguments(args);
 		return fragment;
 	}
