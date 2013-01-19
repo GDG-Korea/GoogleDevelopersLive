@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">GDLive</string>
+    <string name="menu_developre">Développeur</string>
+    <string name="menu_category">Catégorie</string>
+    <string name="menu_schedule">Calendrier</string>
+    <string name="error_player">Il y a eu une erreur lors de l\'initialisation du lecteur Youtube(%1$s)</string>
+    <string name="schedule_message">Regardez les prochains programmes</string>
+
+    <!-- Do not change below when you translate -->
+    <string-array name="category">
+        <item>Tout</item>
+        <item>ads</item>
+        <item>android</item>
+        <item>chrome</item>
+        <item>cloud</item>
+        <item>commerce</item>
+        <item>drive</item>
+        <item>generique</item>
+        <item>tv</item>
+        <item>plus</item>
+        <item>maps</item>
+        <item>primetime</item>
+        <item>youtube</item>
+    </string-array>
+
+</resources>
