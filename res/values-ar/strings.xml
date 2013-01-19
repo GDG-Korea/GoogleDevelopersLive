@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="menu_developre">مبرمج</string>
+    <string name="menu_category">الفئة</string>
+    <string name="menu_schedule">الجدول</string>
+    <string name="error_player">هناك خطأ في بدأ تشغيل الفيديو (%1$s)</string>
+    <string name="schedule_message">تفقد العروض القادمة</string>
+</resources>
