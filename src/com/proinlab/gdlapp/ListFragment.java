@@ -202,12 +202,17 @@ public class ListFragment extends SherlockFragment {
 											date.indexOf("<div"));
 								date = REMOVE_UNNECESSORY(date);
 
-								ArrayList<String> data = new ArrayList<String>();
+								final ArrayList<String> data = new ArrayList<String>();
 								data.add(title);
 								data.add(date);
 								data.add(thumbnail);
 								data.add(link);
-								arList.add(data);
+								mHandler.post(new Runnable() {
+									@Override
+									public void run() {
+										arList.add(data);
+									}
+								});
 							}
 						}
 					}
