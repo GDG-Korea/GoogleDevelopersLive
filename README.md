@@ -12,10 +12,10 @@ Refer to this page, http://actionbarsherlock.com/<br>
 I named Library project "ActionBarSherlockLibrary".<br>
 I recommend you to follow this name when you import ActionBarSherlock Library.<br>
 
-<h2><strong>How to Translation</strong></h2>
+<h2><strong>How to Translate</strong></h2>
 
 For translating this app, import this project and translate "string.xml."<br>
-And you translate this,
+And you translate this too.
 <hr />
 GDLive is OpenSource Project that started at gdgkr-organizers.<br>
 This application is able to watch Google Developers Live page's youtube movie and scheduled programs.
