@@ -14,7 +14,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,9 +22,11 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ListView;
 
+import com.actionbarsherlock.app.SherlockFragment;
+
 // this Fragment act in MainActivity for tab
 @SuppressLint("HandlerLeak")
-public class ListFragment extends Fragment {
+public class ListFragment extends SherlockFragment {
 
 	public static final String ARG_SECTION_CATE = "ARG_SECTION_CATE";
 	private boolean isThreadActive = false; // if thread already activate

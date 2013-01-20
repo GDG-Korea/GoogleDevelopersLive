@@ -10,22 +10,23 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.ListView;
+
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 
 @SuppressLint("HandlerLeak")
-public class Schedule extends Activity {
+public class Schedule extends SherlockActivity {
 
 	private ScheduleListViewAdapter mAdapter;
 	private ListView mListView;
@@ -40,7 +41,7 @@ public class Schedule extends Activity {
 		setContentView(R.layout.schedule);
 
 		String titleStr = getResources().getString(R.string.schedule_message);
-		final ActionBar actionBar = getActionBar();
+		final ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setTitle(titleStr);
 
@@ -66,6 +67,7 @@ public class Schedule extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		getSupportMenuInflater().inflate(R.menu.schedule, menu);
 		return true;
 	}
 

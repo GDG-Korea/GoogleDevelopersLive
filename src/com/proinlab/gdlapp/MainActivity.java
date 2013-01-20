@@ -1,18 +1,19 @@
 package com.proinlab.gdlapp;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
-public class MainActivity extends FragmentActivity implements
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.ActionBar.Tab;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+
+public class MainActivity extends SherlockFragmentActivity implements
 		ActionBar.TabListener {
 
 	private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -25,7 +26,7 @@ public class MainActivity extends FragmentActivity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		final ActionBar actionBar = getActionBar();
+		final ActionBar actionBar = getSupportActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		actionBar.setDisplayShowCustomEnabled(true);
 		
@@ -60,7 +61,7 @@ public class MainActivity extends FragmentActivity implements
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.activity_main, menu);
+		getSupportMenuInflater().inflate(R.menu.activity_main, menu);
 		return true;
 	}
 
@@ -80,18 +81,18 @@ public class MainActivity extends FragmentActivity implements
 	}
 
 	@Override
-	public void onTabSelected(ActionBar.Tab tab,
-			FragmentTransaction fragmentTransaction) {
+	public void onTabSelected(Tab tab,
+			android.support.v4.app.FragmentTransaction ft) {
 		mViewPager.setCurrentItem(tab.getPosition());
 	}
 
 	@Override
-	public void onTabUnselected(ActionBar.Tab tab,
-			FragmentTransaction fragmentTransaction) {
+	public void onTabUnselected(Tab tab,
+			android.support.v4.app.FragmentTransaction ft) {
 	}
 
 	@Override
-	public void onTabReselected(ActionBar.Tab tab,
-			FragmentTransaction fragmentTransaction) {
+	public void onTabReselected(Tab tab,
+			android.support.v4.app.FragmentTransaction ft) {
 	}
 }
