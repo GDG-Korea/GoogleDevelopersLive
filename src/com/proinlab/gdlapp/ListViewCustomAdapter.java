@@ -1,6 +1,9 @@
 package com.proinlab.gdlapp;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
@@ -16,8 +19,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.BitmapFactory.Options;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,8 +37,7 @@ class ListViewCustomAdapter extends BaseAdapter implements OnClickListener {
 	private LayoutInflater Inflater;
 	private ArrayList<ArrayList<String>> arSrc;
 	private int layout;
-	private Bitmap[] bitmap;
-	private ImageView[] Thumbnail;
+	private LruCache<Integer, Bitmap> bitmapCache;
 
 	public static final int ARRAY_INDEX_TITLE = 0;
 	public static final int ARRAY_INDEX_DATE = 1;
@@ -48,9 +52,12 @@ class ListViewCustomAdapter extends BaseAdapter implements OnClickListener {
 		arSrc = aarSrc;
 		layout = R.layout.listview_contents;
 
-		Thumbnail = new ImageView[10000];
-		bitmap = new Bitmap[10000];
-
+		bitmapCache = new LruCache<Integer, Bitmap>(10 * 1024 * 1024) {
+			@Override
+			protected int sizeOf(Integer key, Bitmap value) {
+				return value.getRowBytes() * value.getHeight();
+			}
+		};
 	}
 
 	public int getCount() {
@@ -71,9 +78,10 @@ class ListViewCustomAdapter extends BaseAdapter implements OnClickListener {
 			convertView = Inflater.inflate(layout, parent, false);
 		}
 
-		Thumbnail[position] = (ImageView) convertView
+		ImageView imageView = (ImageView) convertView
 				.findViewById(R.id.listview_content_thumbnail);
-		Thumbnail[position].setImageBitmap(null);
+		imageView.setImageBitmap(null);
+		imageView.setTag(Integer.valueOf(position));
 
 		TextView title = (TextView) convertView
 				.findViewById(R.id.listview_content_name);
@@ -86,7 +94,7 @@ class ListViewCustomAdapter extends BaseAdapter implements OnClickListener {
 		convertView.setTag(position);
 		convertView.setOnClickListener(this);
 
-		process(arSrc.get(position).get(ARRAY_INDEX_THUMBNAIL), position);
+		process(arSrc.get(position).get(ARRAY_INDEX_THUMBNAIL), position, imageView);
 
 		return convertView;
 	}
@@ -147,32 +155,60 @@ class ListViewCustomAdapter extends BaseAdapter implements OnClickListener {
 	}
 
 	private final Handler handler = new Handler() {
-		@Override
-		public void handleMessage(Message msg) {
-			if (bitmap == null)
-				return;
-			Thumbnail[msg.what].setImageBitmap(bitmap[msg.what]);
-		}
 	};
 
-	private void process(final String url, final int position) {
+	private void process(final String url, final int position, final ImageView imageView) {
 		new Thread() {
+			private int calculateSampleSize(Options options, ImageView imageView) {
+				final int width = options.outWidth;
+				final int height = options.outHeight;
+				final int viewWidth = imageView.getWidth();
+				final int viewHeight = imageView.getHeight();
+		        final int widthRatio = Math.round((float) width / (float) viewWidth);
+				final int heightRatio = Math.round((float) height / (float) viewHeight);
+				final int inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
+				return inSampleSize;
+			}
+			
 			@Override
 			public void run() {
-				try {
-					if(bitmap[position]==null) {
-						InputStream is = new URL(url).openStream();
-						bitmap[position] = BitmapFactory.decodeStream(is);
-						is.close();
-					}
-					
-					handler.post(new Runnable() {
-						public void run() {
-							handler.sendEmptyMessage(position);
+				Bitmap bitmap = bitmapCache.get(position);
+				if (bitmap == null) {
+					try {
+						// Because we down-scale list view's images, input stream have to be given to
+						// the decoder twice. InputStream cannot reuse. We will use buffered stream instead. 
+						InputStream rawInputStream = new URL(url).openStream();
+						InputStream bufferedInputStream = new BufferedInputStream(rawInputStream);
+						
+						// get the image bounds
+						Options options = new BitmapFactory.Options();
+						options.inJustDecodeBounds = true;
+						BitmapFactory.decodeStream(bufferedInputStream, null, options);
+						
+						// rewind input stream and retrieve the down-scaled image.
+						bufferedInputStream.reset();
+						options.inSampleSize = calculateSampleSize(options,
+								imageView);
+						options.inJustDecodeBounds = false;
+						bitmap = BitmapFactory.decodeStream(bufferedInputStream, null, options);
+						
+						if (bitmapCache.get(position) == null) {
+							bitmapCache.put(position, bitmap);
 						}
-					});
-				} catch (Exception e) {
+					} catch (MalformedURLException e) {
+					} catch (IOException e) {
+					}
 				}
+
+				final Bitmap runnableBitmap = bitmap;
+				handler.post(new Runnable() {
+					@Override
+					public void run() {
+						if (position == (Integer) imageView.getTag()) {
+							imageView.setImageBitmap(runnableBitmap);
+						}
+					}
+				});
 			}
 		}.start();
 	}
