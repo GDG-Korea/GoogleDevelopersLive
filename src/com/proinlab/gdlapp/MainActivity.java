@@ -4,8 +4,10 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
@@ -17,9 +19,37 @@ public class MainActivity extends SherlockFragmentActivity implements
 		ActionBar.TabListener {
 
 	private SectionsPagerAdapter mSectionsPagerAdapter;
+	private int CurrentItem = 0;
 
 	private ViewPager mViewPager;
 	public static AlertDialog alert = null;
+
+	// TODO Change KeyEvent for customizing.
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		switch (keyCode) {
+		case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
+			mViewPager.setCurrentItem(CurrentItem + 1);
+			CurrentItem++;
+			if (CurrentItem < mSectionsPagerAdapter.getCount()) {
+				mViewPager.setCurrentItem(CurrentItem + 1);
+				CurrentItem++;
+			} else
+				Toast.makeText(this, R.string.no_next_tab_message,
+						Toast.LENGTH_SHORT).show();
+			return true;
+		case KeyEvent.KEYCODE_MEDIA_REWIND:
+			if (CurrentItem != 0) {
+				mViewPager.setCurrentItem(CurrentItem - 1);
+				CurrentItem--;
+			} else
+				Toast.makeText(this, R.string.no_privious_tab_message,
+						Toast.LENGTH_SHORT).show();
+			return true;
+		default:
+			return super.onKeyDown(keyCode, event);
+		}
+
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +59,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 		final ActionBar actionBar = getSupportActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		actionBar.setDisplayShowCustomEnabled(true);
-		
+
 		mSectionsPagerAdapter = new SectionsPagerAdapter(
 				getSupportFragmentManager(), this);
 
@@ -84,6 +114,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 	public void onTabSelected(Tab tab,
 			android.support.v4.app.FragmentTransaction ft) {
 		mViewPager.setCurrentItem(tab.getPosition());
+		CurrentItem = tab.getPosition();
 	}
 
 	@Override

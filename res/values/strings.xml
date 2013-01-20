@@ -7,7 +7,9 @@
     <string name="menu_schedule">Schedule</string>
     <string name="error_player">There was an error initializing the YouTubePlayer (%1$s)</string>
     <string name="schedule_message">Check out upcoming shows</string>
-    
+    <string name="no_privious_tab_message">There is no previous tab.</string>
+    <string name="no_next_tab_message">There is no next tab.</string>
+
     <!-- Do not change below when you translate -->
     <string-array name="category">
         <item>All</item>
