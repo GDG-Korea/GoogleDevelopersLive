@@ -33,17 +33,13 @@ public class MainActivity extends SherlockFragmentActivity implements
 			if (CurrentItem < mSectionsPagerAdapter.getCount()) {
 				mViewPager.setCurrentItem(CurrentItem + 1);
 				CurrentItem++;
-			} else
-				Toast.makeText(this, R.string.no_next_tab_message,
-						Toast.LENGTH_SHORT).show();
+			} 
 			return true;
 		case KeyEvent.KEYCODE_DPAD_LEFT:
 			if (CurrentItem != 0) {
 				mViewPager.setCurrentItem(CurrentItem - 1);
 				CurrentItem--;
-			} else
-				Toast.makeText(this, R.string.no_privious_tab_message,
-						Toast.LENGTH_SHORT).show();
+			}
 			return true;
 		default:
 			return super.onKeyDown(keyCode, event);
