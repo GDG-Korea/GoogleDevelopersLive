@@ -27,7 +27,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 	// TODO Change KeyEvent for customizing.
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		switch (keyCode) {
-		case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
+		case KeyEvent.KEYCODE_DPAD_RIGHT:
 			mViewPager.setCurrentItem(CurrentItem + 1);
 			CurrentItem++;
 			if (CurrentItem < mSectionsPagerAdapter.getCount()) {
@@ -37,7 +37,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 				Toast.makeText(this, R.string.no_next_tab_message,
 						Toast.LENGTH_SHORT).show();
 			return true;
-		case KeyEvent.KEYCODE_MEDIA_REWIND:
+		case KeyEvent.KEYCODE_DPAD_LEFT:
 			if (CurrentItem != 0) {
 				mViewPager.setCurrentItem(CurrentItem - 1);
 				CurrentItem--;
