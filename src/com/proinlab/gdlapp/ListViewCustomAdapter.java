@@ -104,11 +104,7 @@ class ListViewCustomAdapter extends BaseAdapter implements OnClickListener {
 	private String youtubelink, title;
 	private Handler mHandler = new Handler() {
 		public void handleMessage(Message msg) {
-			
-//			Intent intent = YouTubeIntents.createPlayVideoIntentWithOptions(
-//					maincon, youtubelink, true, false);
-//			maincon.startActivity(intent);
-			
+						
 			Intent intent = new Intent(maincon, Contents.class);
 			intent.putExtra(Contents.EXTRAS_CONTENTS_LINK, youtubelink);
 			intent.putExtra(Contents.EXTRAS_CONTENTS_TITLE, title);
@@ -166,10 +162,12 @@ class ListViewCustomAdapter extends BaseAdapter implements OnClickListener {
 			@Override
 			public void run() {
 				try {
-					InputStream is = new URL(url).openStream();
-					bitmap[position] = BitmapFactory.decodeStream(is);
-					is.close();
-
+					if(bitmap[position]==null) {
+						InputStream is = new URL(url).openStream();
+						bitmap[position] = BitmapFactory.decodeStream(is);
+						is.close();
+					}
+					
 					handler.post(new Runnable() {
 						public void run() {
 							handler.sendEmptyMessage(position);
