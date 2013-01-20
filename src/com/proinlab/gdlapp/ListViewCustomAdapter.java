@@ -72,7 +72,7 @@ class ListViewCustomAdapter extends BaseAdapter implements OnClickListener {
 		return position;
 	}
 
-	// °¢ Ç×¸ñÀÇ ºä »ı¼º
+	// ê° í•­ëª©ì˜ ë·° ìƒì„±
 	public View getView(int position, View convertView, ViewGroup parent) {
 		if (convertView == null) {
 			convertView = Inflater.inflate(layout, parent, false);
