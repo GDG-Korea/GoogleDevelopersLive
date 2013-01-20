@@ -93,12 +93,10 @@ class ListViewCustomAdapter extends BaseAdapter implements OnClickListener {
 
 	public void onClick(View v) {
 		int position = (Integer) v.getTag();
-
 		ArrayList<String> data = getItem(position);
 		MainActivity.alert.show();
 		title = data.get(ARRAY_INDEX_TITLE);
 		getYouTubeUrl(data);
-
 	}
 
 	private String youtubelink, title;
@@ -115,7 +113,7 @@ class ListViewCustomAdapter extends BaseAdapter implements OnClickListener {
 		}
 	};
 
-	private void getYouTubeUrl(final ArrayList<String> data) {
+	public void getYouTubeUrl(final ArrayList<String> data) {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {

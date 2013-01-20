@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +49,22 @@ public class ListFragment extends SherlockFragment {
 
 	public ListFragment() {
 	}
-
+	
+	public int FOCUSED_POSITION = 0;
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		switch (keyCode) {
+		case KeyEvent.KEYCODE_DPAD_CENTER:
+			//TODO 
+			int FOCUSED_POSITION = 0;
+			ArrayList<String> data = mAdapter.getItem(FOCUSED_POSITION);
+			MainActivity.alert.show();
+			mAdapter.getYouTubeUrl(data);
+			return true;
+		default:
+			return false;
+		}
+	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -103,7 +119,6 @@ public class ListFragment extends SherlockFragment {
 				htmldata = null;
 				if (nextpagecode.equals("none"))
 					mListView.removeFooterView(footer);
-
 				break;
 			}
 		}

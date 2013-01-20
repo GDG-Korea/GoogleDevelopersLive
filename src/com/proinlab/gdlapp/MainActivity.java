@@ -7,7 +7,6 @@ import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
@@ -24,7 +23,6 @@ public class MainActivity extends SherlockFragmentActivity implements
 	private ViewPager mViewPager;
 	public static AlertDialog alert = null;
 
-	// TODO Change KeyEvent for customizing.
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		switch (keyCode) {
 		case KeyEvent.KEYCODE_DPAD_RIGHT:
@@ -44,7 +42,6 @@ public class MainActivity extends SherlockFragmentActivity implements
 		default:
 			return super.onKeyDown(keyCode, event);
 		}
-
 	}
 
 	@Override
