@@ -50,7 +50,6 @@ public class ListFragment extends SherlockFragment {
 	public ListFragment() {
 	}
 	
-	public int FOCUSED_POSITION = 0;
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		switch (keyCode) {
 		case KeyEvent.KEYCODE_DPAD_CENTER:
