@@ -35,16 +35,26 @@ public class Contents extends YouTubeFailureRecoveryActivity implements
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		switch (keyCode) {
 		case KeyEvent.KEYCODE_MEDIA_PAUSE:
-			if(player.isPlaying())
+			if (player.isPlaying())
 				player.pause();
 			return true;
 		case KeyEvent.KEYCODE_MEDIA_PLAY:
-			if(!player.isPlaying())
+			if (!player.isPlaying())
 				player.play();
+			return true;
+		case KeyEvent.KEYCODE_MEDIA_STOP:
+			finish();
+			return true;
+		case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
+			player.seekToMillis(player.getCurrentTimeMillis() + 5000);
+			return true;
+		case KeyEvent.KEYCODE_MEDIA_REWIND:
+			player.seekToMillis(player.getCurrentTimeMillis() - 5000);
 			return true;
 		default:
 			return super.onKeyDown(keyCode, event);
 		}
+
 	}
 
 	@Override
@@ -76,7 +86,7 @@ public class Contents extends YouTubeFailureRecoveryActivity implements
 		player.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT);
 		player.setOnFullscreenListener(this);
 		this.player = player;
-		
+
 		if (!wasRestored) {
 			player.loadVideo(YouTubeId);
 		}
