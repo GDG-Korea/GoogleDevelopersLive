@@ -8,7 +8,7 @@ Any requests are welcomed! (translation, adding functions ..)
 ##Import ActionBarSherlock Library
 
 Because this project use [ActionBarSherlock](http://actionbarsherlock.com/) Library, you must import ActionBarSherlock.<br />
-Refer to this page, [http://actionbarsherlock.com/](http://actionbarsherlock.com/))<br />
+Refer to this page, [http://actionbarsherlock.com/](http://actionbarsherlock.com/)<br />
 I named Library project `ActionBarSherlockLibrary`.<br/>
 I recommend you to follow this name when you import ActionBarSherlock Library.<br />
 
