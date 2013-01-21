@@ -1,16 +1,17 @@
 package com.proinlab.gdlapp;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-public class DevInfo extends Activity {
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+
+public class DevInfo extends SherlockActivity {
 
 	private Button webbtn;
 
@@ -18,7 +19,7 @@ public class DevInfo extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.devinfo);
 
-		final ActionBar actionBar = getActionBar();
+		final ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 
 		webbtn = (Button) findViewById(R.id.devinfo_webbtn);
