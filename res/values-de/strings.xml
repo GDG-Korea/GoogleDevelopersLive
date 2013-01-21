@@ -3,8 +3,25 @@
 
     <string name="app_name">GDLive</string>
     <string name="menu_developre">Developer</string>
-    <string name="menu_category">Kategorie</string>
     <string name="menu_schedule">Agenda</string>
     <string name="error_player">Es gab einen Fehler beim Initalisieren des YouTubePlayers (%1$s)</string>
+    <string name="schedule_message">Check out upcoming shows</string>
+
+    <!-- Do not change below when you translate -->
+    <string-array name="category">
+        <item>All</item>
+        <item>ads</item>
+        <item>android</item>
+        <item>chrome</item>
+        <item>cloud</item>
+        <item>commerce</item>
+        <item>drive</item>
+        <item>generic</item>
+        <item>tv</item>
+        <item>plus</item>
+        <item>maps</item>
+        <item>primetime</item>
+        <item>youtube</item>
+    </string-array>
 
 </resources>
