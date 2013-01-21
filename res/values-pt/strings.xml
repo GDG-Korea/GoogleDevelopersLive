@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GDLive</string>
+    <string name="menu_developre">Desenvolvedor</string>
+    <string name="menu_category">Categoria</string>
+    <string name="menu_schedule">Agenda</string>
+    <string name="error_player">Ocorreu um erro ao iniciar YouTubePlayer (%1$s)</string>
+    <string name="schedule_message">Veja os próximos eventos</string>
+</resources>
