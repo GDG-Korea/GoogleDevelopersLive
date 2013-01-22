@@ -33,7 +33,7 @@
         <activity
             android:name=".Contents"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@style/OverlayActionBarTheme" >
+            android:theme="@style/Theme.Sherlock.Light.DarkActionBar" >
         </activity>
         <activity android:name=".DevInfo" />
     </application>

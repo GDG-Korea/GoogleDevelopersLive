@@ -16,6 +16,7 @@
 
 package com.proinlab.gdlapp;
 
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
@@ -27,7 +28,7 @@ import android.widget.Toast;
  * An abstract activity which deals with recovering from errors which may occur during API
  * initialization, but can be corrected through user action.
  */
-public abstract class YouTubeFailureRecoveryActivity extends YouTubeBaseActivity implements
+public abstract class YouTubeFailureRecoveryActivity extends SherlockFragmentActivity implements
     YouTubePlayer.OnInitializedListener {
 
   private static final int RECOVERY_DIALOG_REQUEST = 1;

@@ -1,27 +1,27 @@
 package com.proinlab.gdlapp;
 
 import android.annotation.TargetApi;
-import android.app.ActionBar;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.google.android.youtube.player.YouTubePlayer;
-import com.google.android.youtube.player.YouTubePlayerFragment;
+import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 
-@TargetApi(11)
 public class Contents extends YouTubeFailureRecoveryActivity implements
 		YouTubePlayer.OnFullscreenListener {
 
 	private ActionBarPaddedFrameLayout viewContainer;
-	private YouTubePlayerFragment playerFragment;
+	private YouTubePlayerSupportFragment playerFragment;
 	private YouTubePlayer player;
 
 	private String Title;
@@ -65,17 +65,17 @@ public class Contents extends YouTubeFailureRecoveryActivity implements
 		YouTubeId = getIntent().getExtras().getString(EXTRAS_CONTENTS_LINK);
 		Title = getIntent().getExtras().getString(EXTRAS_CONTENTS_TITLE);
 
-		getActionBar().setBackgroundDrawable(new ColorDrawable(0xAA000000));
-		getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-		getActionBar().setTitle(Title);
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setBackgroundDrawable(new ColorDrawable(0xAA000000));
+		getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+		getSupportActionBar().setTitle(Title);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		viewContainer = (ActionBarPaddedFrameLayout) findViewById(R.id.view_container);
-		playerFragment = (YouTubePlayerFragment) getFragmentManager()
+		playerFragment = (YouTubePlayerSupportFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.player_fragment);
 
 		playerFragment.initialize(DeveloperKey.DEVELOPER_KEY, this);
-		viewContainer.setActionBar(getActionBar());
+		viewContainer.setActionBar(getSupportActionBar());
 
 	}
 
@@ -94,7 +94,7 @@ public class Contents extends YouTubeFailureRecoveryActivity implements
 
 	@Override
 	protected YouTubePlayer.Provider getYouTubePlayerProvider() {
-		return (YouTubePlayerFragment) getFragmentManager().findFragmentById(
+		return (YouTubePlayerSupportFragment) getSupportFragmentManager().findFragmentById(
 				R.id.player_fragment);
 	}
 
@@ -139,7 +139,7 @@ public class Contents extends YouTubeFailureRecoveryActivity implements
 
 		public void setEnablePadding(boolean enable) {
 			paddingEnabled = enable;
-			requestLayout();
+            requestLayout();
 		}
 
 		@Override

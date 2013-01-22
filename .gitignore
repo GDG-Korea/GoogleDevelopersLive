@@ -10,6 +10,7 @@
 # generated files
 gen/
 bin/
+target/
 
 # Local configuration file (sdk path, etc)
 local.properties

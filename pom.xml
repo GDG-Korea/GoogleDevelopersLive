@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.proinlab.gdlapp</groupId>
+    <artifactId>gdlapp</artifactId>
+    <version>1.0.0</version>
+    <packaging>apk</packaging>
+    <name>GoogleDeveloperLive</name>
+
+    <developers>
+        <developer>
+            <name>Alan Jeon</name>
+            <email>skyisle@gmail.com</email>
+            <id>skyisle</id>
+            <url>http://github.com/skyisle</url>
+            <timezone>+9</timezone>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>Apache License Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <properties>
+        <android.sdk.path>/devel/android-sdk/</android.sdk.path>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <java.version>1.6</java.version>
+        <android.version>4.1.1.4</android.version>
+        <android.platform>16</android.platform>
+        <android.support.version>r11</android.support.version>
+        <android-maven.version>3.5.0</android-maven.version>
+        <abs.version>4.2.0</abs.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.google.android</groupId>
+            <artifactId>android</artifactId>
+            <version>${android.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.android</groupId>
+            <artifactId>support-v4</artifactId>
+            <version>${android.support.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.google.android.youtube</groupId>
+            <artifactId>player</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!-- ABS -->
+        <dependency>
+            <groupId>com.actionbarsherlock</groupId>
+            <artifactId>actionbarsherlock</artifactId>
+            <version>${abs.version}</version>
+            <type>apklib</type>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <sourceDirectory>src</sourceDirectory>
+        <testSourceDirectory>test</testSourceDirectory>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>2.3.2</version>
+                    <configuration>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                    <artifactId>android-maven-plugin</artifactId>
+                    <version>${android-maven.version}</version>
+                    <configuration>
+                        <sdk>
+                            <platform>${android.platform}</platform>
+                        </sdk>
+                        <undeployBeforeDeploy>true</undeployBeforeDeploy>
+                    </configuration>
+                    <extensions>true</extensions>
+                </plugin>
+
+                <!--This plugin's configuration is used to store Eclipse m2e settings
+                    only. It has no influence on the Maven build itself. -->
+                <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>com.google.code.maven-replacer-plugin</groupId>
+                                        <artifactId>maven-replacer-plugin</artifactId>
+                                        <versionRange>[1.4.1,)</versionRange>
+                                        <goals>
+                                            <goal>replace</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore />
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                <artifactId>android-maven-plugin</artifactId>
+                <version>${android-maven.version}</version>
+                <extensions>true</extensions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-eclipse-plugin</artifactId>
+                <version>2.9</version>
+                <configuration>
+                    <excludes>
+                        <exclude>android:android</exclude>
+                        <exclude>com.google.android.maps:maps</exclude>
+                    </excludes>
+                    <buildOutputDirectory>bin</buildOutputDirectory>
+                    <classpathContainers>
+                        <classpathContainer>com.android.ide.eclipse.adt.ANDROID_FRAMEWORK</classpathContainer>
+                    </classpathContainers>
+                    <additionalProjectnatures>
+                        <projectnature>com.android.ide.eclipse.adt.AndroidNature</projectnature>
+                        <projectnature>org.eclipse.ajdt.ui.ajnature</projectnature>
+                    </additionalProjectnatures>
+                    <buildcommands>
+                        <buildcommand>com.android.ide.eclipse.adt.ResourceManagerBuilder</buildcommand>
+                        <buildcommand>com.android.ide.eclipse.adt.PreCompilerBuilder</buildcommand>
+                        <buildcommand>org.eclipse.jdt.core.javabuilder</buildcommand>
+                        <buildcommand>com.android.ide.eclipse.adt.ApkBuilder</buildcommand>
+                    </buildcommands>
+                    <useProjectReferences>false</useProjectReferences>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <profiles>
+        <profile>
+            <id>release</id>
+            <!-- via this activation the profile is automatically used when the release
+                is done with the maven release plugin -->
+            <activation>
+                <property>
+                    <name>performRelease</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jarsigner-plugin</artifactId>
+                        <version>1.2</version>
+                        <executions>
+                            <execution>
+                                <id>signing</id>
+                                <goals>
+                                    <goal>sign</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                                <phase>package</phase>
+                                <inherited>true</inherited>
+                                <configuration>
+                                    <removeExistingSignatures>true</removeExistingSignatures>
+                                    <archiveDirectory />
+                                    <keystore>${sign.keystore}</keystore>
+                                    <alias>${sign.alias}</alias>
+                                    <storepass>${sign.storepass}</storepass>
+                                    <keypass>${sign.keypass}</keypass>
+                                    <verbose>true</verbose>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- the signed apk then needs to be zipaligned -->
+                    <plugin>
+                        <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                        <artifactId>android-maven-plugin</artifactId>
+                        <version>${android-maven.version}</version>
+                        <inherited>true</inherited>
+                        <configuration>
+                            <sign>
+                                <debug>false</debug>
+                            </sign>
+                            <zipalign>
+                                <verbose>true</verbose>
+                                <outputApk>${project.build.directory}/${project.artifactId}-signed-aligned.apk
+                                </outputApk>
+                            </zipalign>
+                            <manifest>
+                                <debuggable>false</debuggable>
+                            </manifest>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>alignApk</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>zipalign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <version>1.7</version>
+                        <configuration>
+                            <artifacts>
+                                <artifact>
+                                    <file>${project.build.directory}/${project.artifactId}-signed-aligned.apk</file>
+                                    <type>apk</type>
+                                    <classifier>signed-aligned</classifier>
+                                </artifact>
+                            </artifacts>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>attach-signed-aligned</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>attach-artifact</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

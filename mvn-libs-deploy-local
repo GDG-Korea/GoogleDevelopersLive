@@ -1,0 +1,2 @@
+mvn install:install-file -Dfile=libs/YouTubeAndroidPlayerApi.jar -DgroupId=com.google.android.youtube -DartifactId=player -Dversion=1.0.0 -Dpackaging=jar
+mvn install:install-file -Dfile=libs/android-support-v4.jar -DgroupId=com.google.android -DartifactId=support-v4 -Dversion=r11 -Dpackaging=jar
