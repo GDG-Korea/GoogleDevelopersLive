@@ -20,17 +20,16 @@
     android:layout_height="match_parent"
     class="com.proinlab.gdlapp.Contents$ActionBarPaddedFrameLayout" >
 
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/player_fragment_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal" >
-
         <fragment
             android:id="@+id/player_fragment"
-            android:name="com.google.android.youtube.player.YouTubePlayerFragment"
+            android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-
-    </LinearLayout>
+    </FrameLayout>
 
 </view>
