@@ -30,3 +30,18 @@ I will update Google Play List.<br/>
 please, announce me about your language.
 
 [proin0312@gmail.com](mailto:proin0312@gmail.com)
+
+##Release Log
+* 1.0.8 / make use ActionbarSherlock with youtube api [by skyisle]
+* 1.0.7 / Add Portuguese translation by Douglas [Drumond]
+* 1.0.6 / Fix java.lang.IllegalStateException by [dalinaum]
+* 1.0.5 / Fix Out of memory by [dalinaum]
+* 1.0.4 / support Google TV by [YunsuChoi]
+* 1.0.3 / support API 8
+* 1.0.3 / change Image loading process
+* 1.0.2 / add Korean translation [by YunsuChoi]
+* 1.0.2 / add German translation [by friedger]
+* 1.0.2 / add Italian translation [by Xflofoxx]
+* 1.0.2 / add Arabic translation [by Shereef]
+* 1.0.2 / add French translation [by eyal-lezmy]
+* 1.0.1 / change minium SDK Version. (API 12)
