@@ -1,9 +1,7 @@
 package com.proinlab.gdlapp;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.KeyEvent;

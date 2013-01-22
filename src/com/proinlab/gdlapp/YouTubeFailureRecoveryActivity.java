@@ -16,13 +16,12 @@
 
 package com.proinlab.gdlapp;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.google.android.youtube.player.YouTubeBaseActivity;
-import com.google.android.youtube.player.YouTubeInitializationResult;
-import com.google.android.youtube.player.YouTubePlayer;
-
 import android.content.Intent;
 import android.widget.Toast;
+
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
 
 /**
  * An abstract activity which deals with recovering from errors which may occur during API
