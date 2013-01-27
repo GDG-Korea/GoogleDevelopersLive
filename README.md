@@ -21,6 +21,7 @@ By this integration, the project got more capability to lower version Android de
 
 ---
 
+#How to Translate
 ###We need your participation.
 
 If you want to provide this app by your mother language,  please translate "[**string.xml**](https://github.com/YunsuChoi/GoogleDevelopersLive/blob/master/res/values/strings.xml)" and commit to make your own language folder like as [values-ko](https://github.com/YunsuChoi/GoogleDevelopersLive/blob/master/res/values/strings.xml) in [res](https://github.com/YunsuChoi/GoogleDevelopersLive/tree/master/res) directory.
