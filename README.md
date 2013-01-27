@@ -27,8 +27,8 @@ If you want to provide this app by your mother language,  please translate "[**s
 
 ####*Also if you have enough time, please translate below [**`Google Play Store app Description`**](https://play.google.com/store/apps/details?id=com.proinlab.gdlapp) either.*
 
-`GDLive is OpenSource Project that started at gdgkr-organizers.
-This application is able to watch Google Developers Live page's youtube movie and scheduled programs.`
+`GDLive is OpenSource Project that started at gdgkr-organizers.`
+`This application is able to watch Google Developers Live page's youtube movie and scheduled programs.`
 
 `I made public this project at github.
 https://github.com/proin/GoogleDevelopersLive`
