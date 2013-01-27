@@ -26,15 +26,16 @@ By this integration, the project got more capability to lower version Android de
 If you want to provide this app by your mother language,  please translate "[**string.xml**](https://github.com/YunsuChoi/GoogleDevelopersLive/blob/master/res/values/strings.xml)" and commit to make your own language folder like as [values-ko](https://github.com/YunsuChoi/GoogleDevelopersLive/blob/master/res/values/strings.xml) in [res](https://github.com/YunsuChoi/GoogleDevelopersLive/tree/master/res) directory.
 
 ####*Also if you have enough time, please translate below [**`Google Play Store app Description`**](https://play.google.com/store/apps/details?id=com.proinlab.gdlapp) either.*
+```
+GDLive is OpenSource Project that started at gdgkr-organizers.
+This application is able to watch Google Developers Live page's youtube movie and scheduled programs.
 
-`GDLive is OpenSource Project that started at gdgkr-organizers.`
-`This application is able to watch Google Developers Live page's youtube movie and scheduled programs.`
+I made public this project at github.
+https://github.com/proin/GoogleDevelopersLive
 
-`I made public this project at github.
-https://github.com/proin/GoogleDevelopersLive`
-
-`please, report bug at github.
-And any requests are welcomed! (translation, adding functions ..)`
+please, report bug at github.
+And any requests are welcomed! (translation, adding functions ..)
+```
 
 *I will update Google Play Store Description.*
 *please, announce me or Github Commit about your language.*
