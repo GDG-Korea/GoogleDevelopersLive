@@ -1,3 +1,4 @@
+
 package com.proinlab.gdlapp;
 
 import java.io.InputStream;
@@ -21,98 +22,98 @@ import android.widget.TextView;
 @SuppressLint("HandlerLeak")
 class ScheduleListViewAdapter extends BaseAdapter implements OnClickListener {
 
-	private LayoutInflater Inflater;
-	private ArrayList<ArrayList<String>> arSrc;
-	private int layout;
-	private Bitmap[] bitmap;
-	private ImageView[] Thumbnail;
+    private LayoutInflater Inflater;
+    private ArrayList<ArrayList<String>> arSrc;
+    private int layout;
+    private Bitmap[] bitmap;
+    private ImageView[] Thumbnail;
 
-	public static final int ARRAY_INDEX_TITLE = 0;
-	public static final int ARRAY_INDEX_DATE = 1;
-	public static final int ARRAY_INDEX_THUMBNAIL = 2;
+    public static final int ARRAY_INDEX_TITLE = 0;
+    public static final int ARRAY_INDEX_DATE = 1;
+    public static final int ARRAY_INDEX_THUMBNAIL = 2;
 
-	public ScheduleListViewAdapter(Context context,
-			ArrayList<ArrayList<String>> aarSrc) {
-		Inflater = (LayoutInflater) context
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		arSrc = aarSrc;
-		layout = R.layout.schedule_content;
+    public ScheduleListViewAdapter(Context context,
+            ArrayList<ArrayList<String>> aarSrc) {
+        Inflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        arSrc = aarSrc;
+        layout = R.layout.schedule_content;
 
-		Thumbnail = new ImageView[aarSrc.size()];
-		bitmap = new Bitmap[aarSrc.size()];
-	}
+        Thumbnail = new ImageView[aarSrc.size()];
+        bitmap = new Bitmap[aarSrc.size()];
+    }
 
-	public int getCount() {
-		return arSrc.size();
-	}
+    public int getCount() {
+        return arSrc.size();
+    }
 
-	public ArrayList<String> getItem(int position) {
-		return arSrc.get(position);
-	}
+    public ArrayList<String> getItem(int position) {
+        return arSrc.get(position);
+    }
 
-	public long getItemId(int position) {
-		return position;
-	}
+    public long getItemId(int position) {
+        return position;
+    }
 
-	public View getView(int position, View convertView, ViewGroup parent) {
-		if (convertView == null) {
-			convertView = Inflater.inflate(layout, parent, false);
-		}
+    public View getView(int position, View convertView, ViewGroup parent) {
+        if (convertView == null) {
+            convertView = Inflater.inflate(layout, parent, false);
+        }
 
-		Thumbnail[position] = (ImageView) convertView
-				.findViewById(R.id.schedule_content_thumbnails);
-		Thumbnail[position].setImageBitmap(null);
-		
-		TextView title = (TextView) convertView
-				.findViewById(R.id.schedule_content_name);
-		title.setText(arSrc.get(position).get(ARRAY_INDEX_TITLE));
+        Thumbnail[position] = (ImageView) convertView
+                .findViewById(R.id.schedule_content_thumbnails);
+        Thumbnail[position].setImageBitmap(null);
 
-		TextView date = (TextView) convertView
-				.findViewById(R.id.schedule_content_date);
-		date.setText(arSrc.get(position).get(ARRAY_INDEX_DATE));
+        TextView title = (TextView) convertView
+                .findViewById(R.id.schedule_content_name);
+        title.setText(arSrc.get(position).get(ARRAY_INDEX_TITLE));
 
-		convertView.setTag(position);
-		convertView.setOnClickListener(this);
-		
-		process(arSrc.get(position).get(ARRAY_INDEX_THUMBNAIL), position);
-		
-		return convertView;
-	}
+        TextView date = (TextView) convertView
+                .findViewById(R.id.schedule_content_date);
+        date.setText(arSrc.get(position).get(ARRAY_INDEX_DATE));
 
-	private final Handler handler = new Handler() {
-		@Override
-		public void handleMessage(Message msg) {
-			if (bitmap[msg.what] == null)
-				return;
-			Thumbnail[msg.what].setImageBitmap(bitmap[msg.what]);
-			Thumbnail[msg.what].setBackgroundDrawable(null);
-		}
-	};
+        convertView.setTag(position);
+        convertView.setOnClickListener(this);
 
-	private void process(final String url, final int position) {
-		new Thread() {
-			@Override
-			public void run() {
-				try {
-					InputStream is = new URL(url).openStream();
-					bitmap[position] = BitmapFactory.decodeStream(is);
-					is.close();
+        process(arSrc.get(position).get(ARRAY_INDEX_THUMBNAIL), position);
 
-					handler.post(new Runnable() {
-						public void run() {
-							handler.sendEmptyMessage(position);
-						}
-					});
-				} catch (Exception e) {
+        return convertView;
+    }
 
-				}
-			}
-		}.start();
-	}
+    private final Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (bitmap[msg.what] == null)
+                return;
+            Thumbnail[msg.what].setImageBitmap(bitmap[msg.what]);
+            Thumbnail[msg.what].setBackgroundDrawable(null);
+        }
+    };
 
-	@Override
-	public void onClick(View v) {
-		
-	}
+    private void process(final String url, final int position) {
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    InputStream is = new URL(url).openStream();
+                    bitmap[position] = BitmapFactory.decodeStream(is);
+                    is.close();
+
+                    handler.post(new Runnable() {
+                        public void run() {
+                            handler.sendEmptyMessage(position);
+                        }
+                    });
+                } catch (Exception e) {
+
+                }
+            }
+        }.start();
+    }
+
+    @Override
+    public void onClick(View v) {
+
+    }
 
 }

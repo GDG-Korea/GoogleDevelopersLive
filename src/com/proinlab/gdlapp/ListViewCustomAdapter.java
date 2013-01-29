@@ -1,3 +1,4 @@
+
 package com.proinlab.gdlapp;
 
 import java.io.BufferedInputStream;
@@ -33,199 +34,202 @@ import android.widget.TextView;
 
 @SuppressLint("HandlerLeak")
 class ListViewCustomAdapter extends BaseAdapter implements OnClickListener {
-	private Context maincon;
-	private LayoutInflater Inflater;
-	private ArrayList<ArrayList<String>> arSrc;
-	private int layout;
-	private LruCache<Integer, Bitmap> bitmapCache;
+    private Context maincon;
+    private LayoutInflater Inflater;
+    private ArrayList<ArrayList<String>> arSrc;
+    private int layout;
+    private LruCache<Integer, Bitmap> bitmapCache;
 
-	public static final int ARRAY_INDEX_TITLE = 0;
-	public static final int ARRAY_INDEX_DATE = 1;
-	public static final int ARRAY_INDEX_THUMBNAIL = 2;
-	public static final int ARRAY_INDEX_LINK = 3;
+    public static final int ARRAY_INDEX_TITLE = 0;
+    public static final int ARRAY_INDEX_DATE = 1;
+    public static final int ARRAY_INDEX_THUMBNAIL = 2;
+    public static final int ARRAY_INDEX_LINK = 3;
 
-	public ListViewCustomAdapter(Context context,
-			ArrayList<ArrayList<String>> aarSrc) {
-		maincon = context;
-		Inflater = (LayoutInflater) context
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		arSrc = aarSrc;
-		layout = R.layout.listview_contents;
+    public ListViewCustomAdapter(Context context,
+            ArrayList<ArrayList<String>> aarSrc) {
+        maincon = context;
+        Inflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        arSrc = aarSrc;
+        layout = R.layout.listview_contents;
 
-		bitmapCache = new LruCache<Integer, Bitmap>(10 * 1024 * 1024) {
-			@Override
-			protected int sizeOf(Integer key, Bitmap value) {
-				return value.getRowBytes() * value.getHeight();
-			}
-		};
-	}
+        bitmapCache = new LruCache<Integer, Bitmap>(10 * 1024 * 1024) {
+            @Override
+            protected int sizeOf(Integer key, Bitmap value) {
+                return value.getRowBytes() * value.getHeight();
+            }
+        };
+    }
 
-	public int getCount() {
-		return arSrc.size();
-	}
+    public int getCount() {
+        return arSrc.size();
+    }
 
-	public ArrayList<String> getItem(int position) {
-		return arSrc.get(position);
-	}
+    public ArrayList<String> getItem(int position) {
+        return arSrc.get(position);
+    }
 
-	public long getItemId(int position) {
-		return position;
-	}
+    public long getItemId(int position) {
+        return position;
+    }
 
-	// 각 항목의 뷰 생성
-	public View getView(int position, View convertView, ViewGroup parent) {
-		if (convertView == null) {
-			convertView = Inflater.inflate(layout, parent, false);
-		}
+    // 각 항목의 뷰 생성
+    public View getView(int position, View convertView, ViewGroup parent) {
+        if (convertView == null) {
+            convertView = Inflater.inflate(layout, parent, false);
+        }
 
-		ImageView imageView = (ImageView) convertView
-				.findViewById(R.id.listview_content_thumbnail);
-		imageView.setImageBitmap(null);
-		imageView.setTag(Integer.valueOf(position));
+        ImageView imageView = (ImageView) convertView
+                .findViewById(R.id.listview_content_thumbnail);
+        imageView.setImageBitmap(null);
+        imageView.setTag(Integer.valueOf(position));
 
-		TextView title = (TextView) convertView
-				.findViewById(R.id.listview_content_name);
-		title.setText(arSrc.get(position).get(ARRAY_INDEX_TITLE));
+        TextView title = (TextView) convertView
+                .findViewById(R.id.listview_content_name);
+        title.setText(arSrc.get(position).get(ARRAY_INDEX_TITLE));
 
-		TextView date = (TextView) convertView
-				.findViewById(R.id.listview_content_date);
-		date.setText(arSrc.get(position).get(ARRAY_INDEX_DATE));
+        TextView date = (TextView) convertView
+                .findViewById(R.id.listview_content_date);
+        date.setText(arSrc.get(position).get(ARRAY_INDEX_DATE));
 
-		convertView.setTag(position);
-		convertView.setOnClickListener(this);
+        convertView.setTag(position);
+        convertView.setOnClickListener(this);
 
-		process(arSrc.get(position).get(ARRAY_INDEX_THUMBNAIL), position, imageView);
+        process(arSrc.get(position).get(ARRAY_INDEX_THUMBNAIL), position, imageView);
 
-		return convertView;
-	}
+        return convertView;
+    }
 
-	public void onClick(View v) {
-		int position = (Integer) v.getTag();
-		ArrayList<String> data = getItem(position);
-		MainActivity.alert.show();
-		title = data.get(ARRAY_INDEX_TITLE);
-		getYouTubeUrl(data);
-	}
+    public void onClick(View v) {
+        int position = (Integer) v.getTag();
+        ArrayList<String> data = getItem(position);
+        MainActivity.alert.show();
+        title = data.get(ARRAY_INDEX_TITLE);
+        getYouTubeUrl(data);
+    }
 
-	private String youtubelink, title;
-	private Handler mHandler = new Handler() {
-		public void handleMessage(Message msg) {
-						
-			Intent intent = new Intent(maincon, Contents.class);
-			intent.putExtra(Contents.EXTRAS_CONTENTS_LINK, youtubelink);
-			intent.putExtra(Contents.EXTRAS_CONTENTS_TITLE, title);
-			maincon.startActivity(intent);
+    private String youtubelink, title;
+    private Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
 
-			if (MainActivity.alert.isShowing())
-				MainActivity.alert.dismiss();
-		}
-	};
+            Intent intent = new Intent(maincon, Contents.class);
+            intent.putExtra(Contents.EXTRAS_CONTENTS_LINK, youtubelink);
+            intent.putExtra(Contents.EXTRAS_CONTENTS_TITLE, title);
+            maincon.startActivity(intent);
 
-	public void getYouTubeUrl(final ArrayList<String> data) {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
+            if (MainActivity.alert.isShowing())
+                MainActivity.alert.dismiss();
+        }
+    };
 
-				String htmldata = HtmlToString(data.get(ARRAY_INDEX_LINK),
-						"utf-8");
+    public void getYouTubeUrl(final ArrayList<String> data) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
 
-				if (htmldata != null)
-					if (htmldata
-							.indexOf("<iframe id=\"ytplayer\" type=\"text/html\"") != -1) {
-						htmldata = htmldata.substring(htmldata
-								.indexOf("<iframe id=\"ytplayer\" type=\"text/html\""));
-						youtubelink = htmldata.substring(htmldata
-								.indexOf("src=\"") + 5);
-						youtubelink = "https:"
-								+ youtubelink.substring(0,
-										youtubelink.indexOf("\""));
-						youtubelink = youtubelink.substring(youtubelink
-								.lastIndexOf("/") + 1);
-					}
-			
-				mHandler.post(new Runnable() {
-					public void run() {
-						
-						mHandler.sendEmptyMessage(0);
-					}
-				});
+                String htmldata = HtmlToString(data.get(ARRAY_INDEX_LINK),
+                        "utf-8");
 
-			}
-		}).start();
-	}
+                if (htmldata != null)
+                    if (htmldata
+                            .indexOf("<iframe id=\"ytplayer\" type=\"text/html\"") != -1) {
+                        htmldata = htmldata.substring(htmldata
+                                .indexOf("<iframe id=\"ytplayer\" type=\"text/html\""));
+                        youtubelink = htmldata.substring(htmldata
+                                .indexOf("src=\"") + 5);
+                        youtubelink = "https:"
+                                + youtubelink.substring(0,
+                                        youtubelink.indexOf("\""));
+                        youtubelink = youtubelink.substring(youtubelink
+                                .lastIndexOf("/") + 1);
+                    }
 
-	private final Handler handler = new Handler() {
-	};
+                mHandler.post(new Runnable() {
+                    public void run() {
 
-	private void process(final String url, final int position, final ImageView imageView) {
-		new Thread() {
-			private int calculateSampleSize(Options options, ImageView imageView) {
-				final int width = options.outWidth;
-				final int height = options.outHeight;
-				final int viewWidth = imageView.getWidth();
-				final int viewHeight = imageView.getHeight();
-		        final int widthRatio = Math.round((float) width / (float) viewWidth);
-				final int heightRatio = Math.round((float) height / (float) viewHeight);
-				final int inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
-				return inSampleSize;
-			}
-			
-			@Override
-			public void run() {
-				Bitmap bitmap = bitmapCache.get(position);
-				if (bitmap == null) {
-					try {
-						// Because we down-scale list view's images, input stream have to be given to
-						// the decoder twice. InputStream cannot reuse. We will use buffered stream instead. 
-						InputStream rawInputStream = new URL(url).openStream();
-						InputStream bufferedInputStream = new BufferedInputStream(rawInputStream);
-						
-						// get the image bounds
-						Options options = new BitmapFactory.Options();
-						options.inJustDecodeBounds = true;
-						BitmapFactory.decodeStream(bufferedInputStream, null, options);
-						
-						// rewind input stream and retrieve the down-scaled image.
-						bufferedInputStream.reset();
-						options.inSampleSize = calculateSampleSize(options,
-								imageView);
-						options.inJustDecodeBounds = false;
-						bitmap = BitmapFactory.decodeStream(bufferedInputStream, null, options);
-						
-						if (bitmapCache.get(position) == null) {
-							bitmapCache.put(position, bitmap);
-						}
-					} catch (MalformedURLException e) {
-					} catch (IOException e) {
-					}
-				}
+                        mHandler.sendEmptyMessage(0);
+                    }
+                });
 
-				final Bitmap runnableBitmap = bitmap;
-				handler.post(new Runnable() {
-					@Override
-					public void run() {
-						if (position == (Integer) imageView.getTag()) {
-							imageView.setImageBitmap(runnableBitmap);
-						}
-					}
-				});
-			}
-		}.start();
-	}
+            }
+        }).start();
+    }
 
-	private String HtmlToString(String addr, String incoding) {
-		DefaultHttpClient httpclient = new DefaultHttpClient();
-		String htmlSource;
-		try {
-			HttpGet request = new HttpGet();
-			request.setURI(new URI(addr));
-			HttpResponse response = httpclient.execute(request);
-			HttpEntity entity = response.getEntity();
-			htmlSource = EntityUtils.toString(entity, incoding);
-		} catch (Exception e) {
-			htmlSource = null;
-		}
-		return htmlSource;
-	}
+    private final Handler handler = new Handler() {
+    };
+
+    private void process(final String url, final int position, final ImageView imageView) {
+        new Thread() {
+            private int calculateSampleSize(Options options, ImageView imageView) {
+                final int width = options.outWidth;
+                final int height = options.outHeight;
+                final int viewWidth = imageView.getWidth();
+                final int viewHeight = imageView.getHeight();
+                final int widthRatio = Math.round((float) width / (float) viewWidth);
+                final int heightRatio = Math.round((float) height / (float) viewHeight);
+                final int inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
+                return inSampleSize;
+            }
+
+            @Override
+            public void run() {
+                Bitmap bitmap = bitmapCache.get(position);
+                if (bitmap == null) {
+                    try {
+                        // Because we down-scale list view's images, input
+                        // stream have to be given to
+                        // the decoder twice. InputStream cannot reuse. We will
+                        // use buffered stream instead.
+                        InputStream rawInputStream = new URL(url).openStream();
+                        InputStream bufferedInputStream = new BufferedInputStream(rawInputStream);
+
+                        // get the image bounds
+                        Options options = new BitmapFactory.Options();
+                        options.inJustDecodeBounds = true;
+                        BitmapFactory.decodeStream(bufferedInputStream, null, options);
+
+                        // rewind input stream and retrieve the down-scaled
+                        // image.
+                        bufferedInputStream.reset();
+                        options.inSampleSize = calculateSampleSize(options,
+                                imageView);
+                        options.inJustDecodeBounds = false;
+                        bitmap = BitmapFactory.decodeStream(bufferedInputStream, null, options);
+
+                        if (bitmapCache.get(position) == null) {
+                            bitmapCache.put(position, bitmap);
+                        }
+                    } catch (MalformedURLException e) {
+                    } catch (IOException e) {
+                    }
+                }
+
+                final Bitmap runnableBitmap = bitmap;
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (position == (Integer) imageView.getTag()) {
+                            imageView.setImageBitmap(runnableBitmap);
+                        }
+                    }
+                });
+            }
+        }.start();
+    }
+
+    private String HtmlToString(String addr, String incoding) {
+        DefaultHttpClient httpclient = new DefaultHttpClient();
+        String htmlSource;
+        try {
+            HttpGet request = new HttpGet();
+            request.setURI(new URI(addr));
+            HttpResponse response = httpclient.execute(request);
+            HttpEntity entity = response.getEntity();
+            htmlSource = EntityUtils.toString(entity, incoding);
+        } catch (Exception e) {
+            htmlSource = null;
+        }
+        return htmlSource;
+    }
 
 }
