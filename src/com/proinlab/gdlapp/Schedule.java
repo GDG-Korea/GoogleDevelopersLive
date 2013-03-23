@@ -108,20 +108,13 @@ public class Schedule extends SherlockActivity {
                                 .indexOf("<header class=\"future\">"), htmldata
                                 .indexOf("<section id=\"previous-shows\">"));
                         while (htmldata
-                                .indexOf("<div class=\"event-timezone\">") != -1) {
+                                .indexOf("data-datetime=\"") != -1) {
                             htmldata = htmldata.substring(htmldata
-                                    .indexOf("<div class=\"event-timezone\">") + 28);
-                            String thumbnail, title, date, location;
+                                    .indexOf("data-datetime=\"") + 15);
+                            String thumbnail, title, date;
 
-                            date = htmldata.substring(0,
-                                    htmldata.indexOf("<span title"));
+                            date = htmldata.substring(0, htmldata.indexOf("\""));
                             date = REMOVE_UNNECESSORY(date);
-                            htmldata = htmldata.substring(htmldata
-                                    .indexOf("span title=") + 12);
-                            location = htmldata.substring(0,
-                                    htmldata.indexOf("\">"));
-                            location = REMOVE_UNNECESSORY(location);
-                            date = date + " (" + location + ")";
 
                             htmldata = htmldata.substring(htmldata
                                     .indexOf("<summary>") + 9);
