@@ -3,13 +3,21 @@ package com.proinlab.gdlapp;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 import java.util.concurrent.RejectedExecutionException;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v4.util.LruCache;
@@ -24,14 +32,18 @@ import android.widget.TextView;
 @SuppressLint("HandlerLeak")
 class ScheduleListViewAdapter extends BaseAdapter implements OnClickListener {
 
+	private Context mContext;
     private LayoutInflater Inflater;
     private ArrayList<ArrayList<String>> arSrc;
     private int layout;
     private LruCache<Integer, Bitmap> bitmapCache;
+    private final SimpleDateFormat sdfWeb = new SimpleDateFormat("dd MMM yyyy HH:mm:ss.S Z", Locale.ENGLISH);
+    private final SimpleDateFormat sdfLocal = new SimpleDateFormat("MMM dd, yyyy hh:mm aa", Locale.getDefault());
 
     public static final int ARRAY_INDEX_TITLE = 0;
     public static final int ARRAY_INDEX_DATE = 1;
     public static final int ARRAY_INDEX_THUMBNAIL = 2;
+    public static final int ARRAY_INDEX_URL = 3;
 
     public ScheduleListViewAdapter(Context context,
             ArrayList<ArrayList<String>> aarSrc) {
@@ -39,6 +51,7 @@ class ScheduleListViewAdapter extends BaseAdapter implements OnClickListener {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         arSrc = aarSrc;
         layout = R.layout.schedule_content;
+        mContext = context;
         
         bitmapCache = new LruCache<Integer, Bitmap>(10 * 1024 * 1024) {
             @Override
@@ -76,8 +89,16 @@ class ScheduleListViewAdapter extends BaseAdapter implements OnClickListener {
 
         TextView date = (TextView) convertView
                 .findViewById(R.id.schedule_content_date);
-        date.setText(arSrc.get(position).get(ARRAY_INDEX_DATE));
+        try {
+        	Date eventDate = sdfWeb.parse(arSrc.get(position).get(ARRAY_INDEX_DATE));
+        	date.setText(sdfLocal.format(eventDate));
+        } catch (ParseException e) {
+        	date.setText(arSrc.get(position).get(ARRAY_INDEX_DATE));
+        }
 
+        ImageView btnAddEvent = (ImageView) convertView.findViewById(R.id.btn_new_event);
+        btnAddEvent.setOnClickListener(new addNewEventClickListener(position));
+        
         convertView.setTag(position);
         convertView.setOnClickListener(this);
 
@@ -111,6 +132,33 @@ class ScheduleListViewAdapter extends BaseAdapter implements OnClickListener {
         return convertView;
     }
 
+    private class addNewEventClickListener implements OnClickListener {
+    	private int position;
+    	
+    	addNewEventClickListener(int pos) {
+    		position = pos;
+    	}
+    	
+    	@Override
+    	public void onClick(View v) {
+            try {
+            	Date eventDate = sdfWeb.parse(arSrc.get(position).get(ARRAY_INDEX_DATE));
+            	Calendar cal = Calendar.getInstance(TimeZone.getDefault());
+            	cal.setTime(eventDate);
+
+                Intent intent = new Intent(Intent.ACTION_EDIT);
+                intent.setType("vnd.android.cursor.item/event");
+                intent.putExtra("beginTime", cal.getTimeInMillis());
+                intent.putExtra("allDay", false);
+                intent.putExtra("endTime", cal.getTimeInMillis()+60*60*1000);
+                intent.putExtra("title", arSrc.get(position).get(ARRAY_INDEX_TITLE));
+                
+                mContext.startActivity(intent);
+            } catch (ParseException e) {
+            }
+    	}
+    };
+    
 	private class ThumbnailAsyncTask extends AsyncTask<Integer, Void, Bitmap> {
 		private final ImageView mTarget;
 
@@ -157,7 +205,12 @@ class ScheduleListViewAdapter extends BaseAdapter implements OnClickListener {
     
     @Override
     public void onClick(View v) {
-
+    	int position = (Integer) v.getTag();
+    	
+    	String url = arSrc.get(position).get(ARRAY_INDEX_URL);    	
+    	Intent intent = new Intent(Intent.ACTION_VIEW);
+    	intent.setData(Uri.parse(url));
+    	mContext.startActivity(intent);
     }
 
 }

@@ -111,7 +111,7 @@ public class Schedule extends SherlockActivity {
                                 .indexOf("data-datetime=\"") != -1) {
                             htmldata = htmldata.substring(htmldata
                                     .indexOf("data-datetime=\"") + 15);
-                            String thumbnail, title, date;
+                            String thumbnail, title, date, url;
 
                             date = htmldata.substring(0, htmldata.indexOf("\""));
                             date = REMOVE_UNNECESSORY(date);
@@ -128,11 +128,19 @@ public class Schedule extends SherlockActivity {
                                     htmldata.indexOf("\""));
                             thumbnail = "https://developers.google.com"
                                     + thumbnail;
+                            
+                            htmldata = htmldata.substring(htmldata
+                            		.indexOf("<a class=\"button\" href=\"") + 24);
+                            url = htmldata.substring(0,
+                                    htmldata.indexOf("\""));
+                            url = "https://developers.google.com"
+                            		+ url;
 
                             ArrayList<String> data = new ArrayList<String>();
                             data.add(title);
                             data.add(date);
                             data.add(thumbnail);
+                            data.add(url);
                             arList.add(data);
                         }
                     }
