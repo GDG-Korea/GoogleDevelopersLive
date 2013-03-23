@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.support.v4.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,6 +27,7 @@ class ScheduleListViewAdapter extends BaseAdapter implements OnClickListener {
     private LayoutInflater Inflater;
     private ArrayList<ArrayList<String>> arSrc;
     private int layout;
+    private LruCache<Integer, Bitmap> bitmapCache;
 
     public static final int ARRAY_INDEX_TITLE = 0;
     public static final int ARRAY_INDEX_DATE = 1;
@@ -37,6 +39,13 @@ class ScheduleListViewAdapter extends BaseAdapter implements OnClickListener {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         arSrc = aarSrc;
         layout = R.layout.schedule_content;
+        
+        bitmapCache = new LruCache<Integer, Bitmap>(10 * 1024 * 1024) {
+            @Override
+            protected int sizeOf(Integer key, Bitmap value) {
+                return value.getRowBytes() * value.getHeight();
+            }
+        };
     }
 
     public int getCount() {
@@ -77,6 +86,15 @@ class ScheduleListViewAdapter extends BaseAdapter implements OnClickListener {
 			oldTask.cancel(false);
 		}
 
+		if (bitmapCache != null) {
+			final Bitmap cachedResult = bitmapCache.get(position);
+			if (cachedResult != null) {
+				thumbnail.setImageBitmap(cachedResult);
+				thumbnail.setBackgroundDrawable(null);
+				return convertView;
+			}
+		}
+		
 		final ThumbnailAsyncTask task = new ThumbnailAsyncTask(thumbnail);
 		thumbnail.setTag(task);
 		try {
@@ -114,6 +132,11 @@ class ScheduleListViewAdapter extends BaseAdapter implements OnClickListener {
 				InputStream is = new URL(url).openStream();
 				final Bitmap result = BitmapFactory.decodeStream(is);
 				is.close();
+				
+				if (bitmapCache != null && result != null) {
+					bitmapCache.put(pos, result);
+				}
+				
 				return result;
 			} catch (Exception e) {
 
