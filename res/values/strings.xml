@@ -6,6 +6,7 @@
     <string name="menu_schedule">Schedule</string>
     <string name="error_player">There was an error initializing the YouTubePlayer (%1$s)</string>
     <string name="schedule_message">Check out upcoming shows</string>
+    <string name="menu_share">Share</string>
 
     <!-- Do not change below when you translate -->
     <string-array name="category">

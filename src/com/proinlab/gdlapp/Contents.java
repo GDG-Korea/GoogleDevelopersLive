@@ -2,6 +2,7 @@
 package com.proinlab.gdlapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.AttributeSet;
@@ -153,6 +154,7 @@ public class Contents extends YouTubeFailureRecoveryActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        getSupportMenuInflater().inflate(R.menu.contents, menu);
         return true;
     }
 
@@ -161,6 +163,13 @@ public class Contents extends YouTubeFailureRecoveryActivity implements
             case android.R.id.home:
                 finish();
                 break;
+            case R.id.menu_share:
+            	Intent i = new Intent();
+            	i.setAction(Intent.ACTION_SEND);
+            	i.putExtra(Intent.EXTRA_TEXT, "https://www.youtube.com/watch?v=" + YouTubeId);
+            	i.setType("text/plain");
+            	startActivity(Intent.createChooser(i, getResources().getString(R.string.menu_share)));
+            	break;
             default:
                 return false;
         }

@@ -6,7 +6,8 @@
     <string name="menu_schedule">時間表</string>
     <string name="error_player">YouTubePlayer 初始化錯誤 (%1$s)</string>
     <string name="schedule_message">看看即將播出的節目</string>
-
+    <string name="menu_share">分享</string>
+    
     <!-- Do not change below when you translate -->
     <string-array name="category">
         <item>All</item>
