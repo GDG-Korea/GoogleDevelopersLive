@@ -38,7 +38,7 @@ class ScheduleListViewAdapter extends BaseAdapter implements OnClickListener {
     private int layout;
     private LruCache<Integer, Bitmap> bitmapCache;
     private final SimpleDateFormat sdfWeb = new SimpleDateFormat("dd MMM yyyy HH:mm:ss.S Z", Locale.ENGLISH);
-    private final SimpleDateFormat sdfLocal = new SimpleDateFormat("MMM dd, yyyy hh:mm aa", Locale.getDefault());
+    private final SimpleDateFormat sdfLocal = new SimpleDateFormat("MMM dd, yyyy, hh:mm aa", Locale.getDefault());
 
     public static final int ARRAY_INDEX_TITLE = 0;
     public static final int ARRAY_INDEX_DATE = 1;
@@ -95,10 +95,10 @@ class ScheduleListViewAdapter extends BaseAdapter implements OnClickListener {
         } catch (ParseException e) {
         	date.setText(arSrc.get(position).get(ARRAY_INDEX_DATE));
         }
-
-        ImageView btnAddEvent = (ImageView) convertView.findViewById(R.id.btn_new_event);
-        btnAddEvent.setOnClickListener(new addNewEventClickListener(position));
         
+        date.setTag(position);
+        date.setOnClickListener(createEventReminderClickListener);
+
         convertView.setTag(position);
         convertView.setOnClickListener(this);
 
@@ -132,32 +132,32 @@ class ScheduleListViewAdapter extends BaseAdapter implements OnClickListener {
         return convertView;
     }
 
-    private class addNewEventClickListener implements OnClickListener {
-    	private int position;
-    	
-    	addNewEventClickListener(int pos) {
-    		position = pos;
-    	}
-    	
-    	@Override
-    	public void onClick(View v) {
-            try {
-            	Date eventDate = sdfWeb.parse(arSrc.get(position).get(ARRAY_INDEX_DATE));
-            	Calendar cal = Calendar.getInstance(TimeZone.getDefault());
-            	cal.setTime(eventDate);
+	private final OnClickListener createEventReminderClickListener = new OnClickListener() {
 
-                Intent intent = new Intent(Intent.ACTION_EDIT);
-                intent.setType("vnd.android.cursor.item/event");
-                intent.putExtra("beginTime", cal.getTimeInMillis());
-                intent.putExtra("allDay", false);
-                intent.putExtra("endTime", cal.getTimeInMillis()+60*60*1000);
-                intent.putExtra("title", arSrc.get(position).get(ARRAY_INDEX_TITLE));
-                
-                mContext.startActivity(intent);
-            } catch (ParseException e) {
-            }
-    	}
-    };
+		@Override
+		public void onClick(View v) {
+			int position = (Integer) v.getTag();
+			
+			try {
+				Date eventDate = sdfWeb.parse(arSrc.get(position).get(ARRAY_INDEX_DATE));
+				Calendar cal = Calendar.getInstance(TimeZone.getDefault());
+				cal.setTime(eventDate);
+
+				Intent intent = new Intent(Intent.ACTION_EDIT);
+				intent.setType("vnd.android.cursor.item/event");
+				intent.putExtra("beginTime", cal.getTimeInMillis());
+				intent.putExtra("allDay", false);
+				intent.putExtra("endTime",
+						cal.getTimeInMillis() + 60 * 60 * 1000);
+				intent.putExtra("title",
+						arSrc.get(position).get(ARRAY_INDEX_TITLE));
+
+				mContext.startActivity(intent);
+			} catch (ParseException e) {
+			}
+		}
+
+	};
     
 	private class ThumbnailAsyncTask extends AsyncTask<Integer, Void, Bitmap> {
 		private final ImageView mTarget;

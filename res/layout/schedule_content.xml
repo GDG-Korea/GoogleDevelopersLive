@@ -2,60 +2,47 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/schedule_content_outline"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="vertical"
+    android:padding="8dp" >
 
     <RelativeLayout
+        android:id="@+id/schedule_content_name_container"
         android:layout_width="fill_parent"
-        android:layout_height="80dip"
-        android:descendantFocusability="blocksDescendants" >
+        android:layout_height="wrap_content" >
 
         <ImageView
-            android:id="@+id/btn_new_event"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:id="@+id/schedule_content_thumbnails"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="6dp"
-            android:layout_marginRight="6dp"
-            android:focusable="false"
-            android:src="@drawable/ic_new_event" />
+            android:layout_marginRight="8dp"
+            android:background="#FF000000"
+            android:contentDescription="Thumbnail" />
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/schedule_content_name"
             android:layout_width="fill_parent"
-            android:layout_height="80dip"
-            android:layout_alignParentLeft="true"
-            android:layout_toLeftOf="@+id/btn_new_event"
-            android:gravity="center_vertical" >
-
-            <ImageView
-                android:id="@+id/schedule_content_thumbnails"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginLeft="5dp"
-                android:background="#FF000000" />
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="1"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:id="@+id/schedule_content_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:text="Title"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                <TextView
-                    android:id="@+id/schedule_content_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="date" />
-            </LinearLayout>
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/schedule_content_thumbnails"
+            android:fontFamily="sans-serif-condensed"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textIsSelectable="false"
+            android:textStyle="bold" />
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/schedule_content_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:drawableLeft="@drawable/ic_new_event"
+        android:drawablePadding="8dp"
+        android:focusable="false"
+        android:fontFamily="sans-serif-light"
+        android:gravity="center_vertical"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textIsSelectable="false" />
 
 </LinearLayout>
