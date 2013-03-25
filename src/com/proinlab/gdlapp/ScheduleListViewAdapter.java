@@ -111,7 +111,6 @@ class ScheduleListViewAdapter extends BaseAdapter implements OnClickListener {
 			final Bitmap cachedResult = bitmapCache.get(position);
 			if (cachedResult != null) {
 				thumbnail.setImageBitmap(cachedResult);
-				thumbnail.setBackgroundDrawable(null);
 				return convertView;
 			}
 		}
@@ -197,7 +196,6 @@ class ScheduleListViewAdapter extends BaseAdapter implements OnClickListener {
 		protected void onPostExecute(Bitmap result) {
 			if (mTarget.getTag() == this) {
 				mTarget.setImageBitmap(result);
-				mTarget.setBackgroundDrawable(null);
 				mTarget.setTag(null);
 			}
 		}
