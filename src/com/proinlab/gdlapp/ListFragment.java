@@ -15,6 +15,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Html;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -189,6 +190,7 @@ public class ListFragment extends SherlockFragment {
                                         htmldata.indexOf("</a>"));
 
                                 title = REMOVE_UNNECESSORY(title);
+                                title = Html.fromHtml(title).toString();
 
                                 htmldata = htmldata.substring(htmldata
                                         .indexOf("</a>") + 4);

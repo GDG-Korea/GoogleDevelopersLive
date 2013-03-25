@@ -15,6 +15,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -121,6 +122,7 @@ public class Schedule extends SherlockActivity {
                             title = htmldata.substring(0,
                                     htmldata.indexOf("<img src"));
                             title = REMOVE_UNNECESSORY(title);
+                            title = Html.fromHtml(title).toString();
 
                             htmldata = htmldata.substring(htmldata
                                     .indexOf("<img src=\"") + 10);
