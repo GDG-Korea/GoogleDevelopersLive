@@ -15,6 +15,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -108,26 +109,20 @@ public class Schedule extends SherlockActivity {
                                 .indexOf("<header class=\"future\">"), htmldata
                                 .indexOf("<section id=\"previous-shows\">"));
                         while (htmldata
-                                .indexOf("<div class=\"event-timezone\">") != -1) {
+                                .indexOf("data-datetime=\"") != -1) {
                             htmldata = htmldata.substring(htmldata
-                                    .indexOf("<div class=\"event-timezone\">") + 28);
-                            String thumbnail, title, date, location;
+                                    .indexOf("data-datetime=\"") + 15);
+                            String thumbnail, title, date, url;
 
-                            date = htmldata.substring(0,
-                                    htmldata.indexOf("<span title"));
+                            date = htmldata.substring(0, htmldata.indexOf("\""));
                             date = REMOVE_UNNECESSORY(date);
-                            htmldata = htmldata.substring(htmldata
-                                    .indexOf("span title=") + 12);
-                            location = htmldata.substring(0,
-                                    htmldata.indexOf("\">"));
-                            location = REMOVE_UNNECESSORY(location);
-                            date = date + " (" + location + ")";
 
                             htmldata = htmldata.substring(htmldata
                                     .indexOf("<summary>") + 9);
                             title = htmldata.substring(0,
                                     htmldata.indexOf("<img src"));
                             title = REMOVE_UNNECESSORY(title);
+                            title = Html.fromHtml(title).toString();
 
                             htmldata = htmldata.substring(htmldata
                                     .indexOf("<img src=\"") + 10);
@@ -135,11 +130,19 @@ public class Schedule extends SherlockActivity {
                                     htmldata.indexOf("\""));
                             thumbnail = "https://developers.google.com"
                                     + thumbnail;
+                            
+                            htmldata = htmldata.substring(htmldata
+                            		.indexOf("<a class=\"button\" href=\"") + 24);
+                            url = htmldata.substring(0,
+                                    htmldata.indexOf("\""));
+                            url = "https://developers.google.com"
+                            		+ url;
 
                             ArrayList<String> data = new ArrayList<String>();
                             data.add(title);
                             data.add(date);
                             data.add(thumbnail);
+                            data.add(url);
                             arList.add(data);
                         }
                     }

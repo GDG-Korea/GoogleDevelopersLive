@@ -1,50 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/listview_contents_outline"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@drawable/navi_effect" >
+    android:layout_height="wrap_content"
+    android:background="@drawable/navi_effect"
+    android:padding="4dp" >
 
-    <RelativeLayout
+    <ImageView
+        android:id="@+id/listview_content_thumbnail"
+        android:layout_width="107dp"
+        android:layout_height="60dp"
+        android:layout_marginRight="4dp"
+        android:background="#FF000000"
+        android:contentDescription="@string/content_description_thumbnail" />
+
+    <TextView
+        android:id="@+id/listview_content_name"
         android:layout_width="fill_parent"
-        android:layout_height="80dip" >
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/listview_content_thumbnail"
+        android:fontFamily="sans-serif-condensed"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textIsSelectable="false"
+        android:textStyle="bold" />
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="80dip"
-            android:layout_alignParentLeft="true"
-            android:layout_marginRight="20dip"
-            android:gravity="center_vertical" >
+    <TextView
+        android:id="@+id/listview_content_date"
+        android:layout_marginTop="4dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/listview_content_name"
+        android:layout_toRightOf="@+id/listview_content_thumbnail"
+        android:fontFamily="sans-serif-light"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textIsSelectable="false" />
 
-            <ImageView
-                android:id="@+id/listview_content_thumbnail"
-                android:layout_width="107dp"
-                android:layout_height="60dp"
-                android:layout_marginLeft="5dp"
-                android:background="#FF000000" />
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="1"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:id="@+id/listview_content_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:text="Title"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                <TextView
-                    android:id="@+id/listview_content_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="date" />
-            </LinearLayout>
-        </LinearLayout>
-    </RelativeLayout>
-
-</LinearLayout>
+</RelativeLayout>

@@ -3,14 +3,24 @@ package com.proinlab.gdlapp;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
+import java.util.concurrent.RejectedExecutionException;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Handler;
-import android.os.Message;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.support.v4.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,15 +32,18 @@ import android.widget.TextView;
 @SuppressLint("HandlerLeak")
 class ScheduleListViewAdapter extends BaseAdapter implements OnClickListener {
 
+	private Context mContext;
     private LayoutInflater Inflater;
     private ArrayList<ArrayList<String>> arSrc;
     private int layout;
-    private Bitmap[] bitmap;
-    private ImageView[] Thumbnail;
+    private LruCache<Integer, Bitmap> bitmapCache;
+    private final SimpleDateFormat sdfWeb = new SimpleDateFormat("dd MMM yyyy HH:mm:ss.S Z", Locale.ENGLISH);
+    private final SimpleDateFormat sdfLocal = new SimpleDateFormat("MMM dd, yyyy, hh:mm aa", Locale.getDefault());
 
     public static final int ARRAY_INDEX_TITLE = 0;
     public static final int ARRAY_INDEX_DATE = 1;
     public static final int ARRAY_INDEX_THUMBNAIL = 2;
+    public static final int ARRAY_INDEX_URL = 3;
 
     public ScheduleListViewAdapter(Context context,
             ArrayList<ArrayList<String>> aarSrc) {
@@ -38,9 +51,14 @@ class ScheduleListViewAdapter extends BaseAdapter implements OnClickListener {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         arSrc = aarSrc;
         layout = R.layout.schedule_content;
-
-        Thumbnail = new ImageView[aarSrc.size()];
-        bitmap = new Bitmap[aarSrc.size()];
+        mContext = context;
+        
+        bitmapCache = new LruCache<Integer, Bitmap>(10 * 1024 * 1024) {
+            @Override
+            protected int sizeOf(Integer key, Bitmap value) {
+                return value.getRowBytes() * value.getHeight();
+            }
+        };
     }
 
     public int getCount() {
@@ -55,14 +73,15 @@ class ScheduleListViewAdapter extends BaseAdapter implements OnClickListener {
         return position;
     }
 
-    public View getView(int position, View convertView, ViewGroup parent) {
+    @SuppressLint("NewApi")
+	public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             convertView = Inflater.inflate(layout, parent, false);
         }
 
-        Thumbnail[position] = (ImageView) convertView
+        ImageView thumbnail = (ImageView) convertView
                 .findViewById(R.id.schedule_content_thumbnails);
-        Thumbnail[position].setImageBitmap(null);
+        thumbnail.setImageBitmap(null);
 
         TextView title = (TextView) convertView
                 .findViewById(R.id.schedule_content_name);
@@ -70,50 +89,126 @@ class ScheduleListViewAdapter extends BaseAdapter implements OnClickListener {
 
         TextView date = (TextView) convertView
                 .findViewById(R.id.schedule_content_date);
-        date.setText(arSrc.get(position).get(ARRAY_INDEX_DATE));
+        try {
+        	Date eventDate = sdfWeb.parse(arSrc.get(position).get(ARRAY_INDEX_DATE));
+        	date.setText(sdfLocal.format(eventDate));
+        } catch (ParseException e) {
+        	date.setText(arSrc.get(position).get(ARRAY_INDEX_DATE));
+        }
+        
+        date.setTag(position);
+        date.setOnClickListener(createEventReminderClickListener);
 
         convertView.setTag(position);
         convertView.setOnClickListener(this);
 
-        process(arSrc.get(position).get(ARRAY_INDEX_THUMBNAIL), position);
+        final ThumbnailAsyncTask oldTask = (ThumbnailAsyncTask) thumbnail.getTag();
+		if (oldTask != null) {
+			oldTask.cancel(false);
+		}
 
+		if (bitmapCache != null) {
+			final Bitmap cachedResult = bitmapCache.get(position);
+			if (cachedResult != null) {
+				thumbnail.setImageBitmap(cachedResult);
+				return convertView;
+			}
+		}
+		
+		final ThumbnailAsyncTask task = new ThumbnailAsyncTask(thumbnail);
+		thumbnail.setTag(task);
+		try {
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+				task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, position);
+			} else {
+				task.execute(position);
+			}
+		} catch (RejectedExecutionException e) {
+		} catch (OutOfMemoryError e) {
+
+		}
+        
         return convertView;
     }
 
-    private final Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            if (bitmap[msg.what] == null)
-                return;
-            Thumbnail[msg.what].setImageBitmap(bitmap[msg.what]);
-            Thumbnail[msg.what].setBackgroundDrawable(null);
-        }
-    };
+	private final OnClickListener createEventReminderClickListener = new OnClickListener() {
 
-    private void process(final String url, final int position) {
-        new Thread() {
-            @Override
-            public void run() {
-                try {
-                    InputStream is = new URL(url).openStream();
-                    bitmap[position] = BitmapFactory.decodeStream(is);
-                    is.close();
+		@Override
+		public void onClick(View v) {
+			int position = (Integer) v.getTag();
+			
+			try {
+				Date eventDate = sdfWeb.parse(arSrc.get(position).get(ARRAY_INDEX_DATE));
+				Calendar cal = Calendar.getInstance(TimeZone.getDefault());
+				cal.setTime(eventDate);
 
-                    handler.post(new Runnable() {
-                        public void run() {
-                            handler.sendEmptyMessage(position);
-                        }
-                    });
-                } catch (Exception e) {
+				Intent intent = new Intent(Intent.ACTION_EDIT);
+				intent.setType("vnd.android.cursor.item/event");
+				intent.putExtra("beginTime", cal.getTimeInMillis());
+				intent.putExtra("allDay", false);
+				intent.putExtra("endTime",
+						cal.getTimeInMillis() + 60 * 60 * 1000);
+				intent.putExtra("title",
+						arSrc.get(position).get(ARRAY_INDEX_TITLE));
 
-                }
-            }
-        }.start();
-    }
+				mContext.startActivity(intent);
+			} catch (ParseException e) {
+			}
+		}
 
+	};
+    
+	private class ThumbnailAsyncTask extends AsyncTask<Integer, Void, Bitmap> {
+		private final ImageView mTarget;
+
+		public ThumbnailAsyncTask(ImageView target) {
+			mTarget = target;
+		}
+
+		@Override
+		protected void onPreExecute() {
+			mTarget.setTag(this);
+		}
+
+		@Override
+		protected Bitmap doInBackground(Integer... params) {
+			final int pos = params[0];
+			final String url = arSrc.get(pos).get(ARRAY_INDEX_THUMBNAIL);
+
+			try {
+				InputStream is = new URL(url).openStream();
+				final Bitmap result = BitmapFactory.decodeStream(is);
+				is.close();
+				
+				if (bitmapCache != null && result != null) {
+					bitmapCache.put(pos, result);
+				}
+				
+				return result;
+			} catch (Exception e) {
+
+			}
+
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Bitmap result) {
+			if (mTarget.getTag() == this) {
+				mTarget.setImageBitmap(result);
+				mTarget.setTag(null);
+			}
+		}
+	}
+    
     @Override
     public void onClick(View v) {
-
+    	int position = (Integer) v.getTag();
+    	
+    	String url = arSrc.get(position).get(ARRAY_INDEX_URL);    	
+    	Intent intent = new Intent(Intent.ACTION_VIEW);
+    	intent.setData(Uri.parse(url));
+    	mContext.startActivity(intent);
     }
 
 }
