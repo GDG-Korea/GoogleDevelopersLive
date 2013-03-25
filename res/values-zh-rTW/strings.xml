@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">GDLive</string>
+    <string name="menu_developre">開發人員</string>
+    <string name="menu_schedule">時間表</string>
+    <string name="error_player">YouTubePlayer 初始化錯誤 (%1$s)</string>
+    <string name="schedule_message">看看即將播出的節目</string>
+
+    <!-- Do not change below when you translate -->
+    <string-array name="category">
+        <item>All</item>
+        <item>ads</item>
+        <item>android</item>
+        <item>chrome</item>
+        <item>cloud</item>
+        <item>commerce</item>
+        <item>drive</item>
+        <item>generic</item>
+        <item>tv</item>
+        <item>plus</item>
+        <item>maps</item>
+        <item>primetime</item>
+        <item>youtube</item>
+    </string-array>
+
+</resources>
