@@ -7,7 +7,8 @@
     <string name="error_player">There was an error initializing the YouTubePlayer (%1$s)</string>
     <string name="schedule_message">Check out upcoming shows</string>
     <string name="menu_share">Share</string>
-
+    <string name="title_share_video">Share this video</string>
+    
     <string name="content_description_thumbnail">Thumbnail</string>
     
     <!-- Do not change below when you translate -->

@@ -168,7 +168,7 @@ public class Contents extends YouTubeFailureRecoveryActivity implements
             	i.setAction(Intent.ACTION_SEND);
             	i.putExtra(Intent.EXTRA_TEXT, "https://www.youtube.com/watch?v=" + YouTubeId);
             	i.setType("text/plain");
-            	startActivity(Intent.createChooser(i, getResources().getString(R.string.menu_share)));
+            	startActivity(Intent.createChooser(i, getResources().getString(R.string.title_share_video)));
             	break;
             default:
                 return false;

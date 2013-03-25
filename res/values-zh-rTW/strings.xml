@@ -7,6 +7,7 @@
     <string name="error_player">YouTubePlayer 初始化錯誤 (%1$s)</string>
     <string name="schedule_message">看看即將播出的節目</string>
     <string name="menu_share">分享</string>
+    <string name="title_share_video">分享這部影片</string>
 
     <string name="content_description_thumbnail">縮圖</string>
     
