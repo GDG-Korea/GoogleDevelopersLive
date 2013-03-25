@@ -12,7 +12,7 @@
         android:layout_height="60dp"
         android:layout_marginRight="4dp"
         android:background="#FF000000"
-        android:contentDescription="Thumbnail" />
+        android:contentDescription="@string/content_description_thumbnail" />
 
     <TextView
         android:id="@+id/listview_content_name"

@@ -8,6 +8,8 @@
     <string name="schedule_message">Check out upcoming shows</string>
     <string name="menu_share">Share</string>
 
+    <string name="content_description_thumbnail">Thumbnail</string>
+    
     <!-- Do not change below when you translate -->
     <string-array name="category">
         <item>All</item>

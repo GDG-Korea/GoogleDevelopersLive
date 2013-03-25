@@ -25,4 +25,6 @@
         <item>youtube</item>
     </string-array>
 
+    <string name="content_description_thumbnail">縮圖</string>
+    
 </resources>

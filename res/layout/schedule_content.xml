@@ -18,7 +18,7 @@
             android:layout_height="32dp"
             android:layout_centerVertical="true"
             android:layout_marginRight="8dp"
-            android:contentDescription="Thumbnail" />
+            android:contentDescription="@string/content_description_thumbnail" />
 
         <TextView
             android:id="@+id/schedule_content_name"
