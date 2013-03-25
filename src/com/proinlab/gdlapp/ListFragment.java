@@ -230,7 +230,7 @@ public class ListFragment extends SherlockFragment {
         }
     }
 
-    private String HtmlToString(String addr, String incoding) {
+    private synchronized String HtmlToString(String addr, String incoding) {
         DefaultHttpClient httpclient = new DefaultHttpClient();
         String htmlSource;
         try {
