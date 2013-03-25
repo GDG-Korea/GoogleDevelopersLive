@@ -11,7 +11,7 @@
     <string name="content_description_thumbnail">Thumbnail</string>
     
     <!-- Do not change below when you translate -->
-    <string-array name="category">
+    <string-array name="category" translatable="false">
         <item>All</item>
         <item>ads</item>
         <item>android</item>

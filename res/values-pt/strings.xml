@@ -7,21 +7,4 @@
     <string name="error_player">Ocorreu um erro ao iniciar YouTubePlayer (%1$s)</string>
     <string name="schedule_message">Veja os próximos eventos</string>
 
-    <!-- Do not change below when you translate -->
-    <string-array name="category">
-        <item>All</item>
-        <item>ads</item>
-        <item>android</item>
-        <item>chrome</item>
-        <item>cloud</item>
-        <item>commerce</item>
-        <item>drive</item>
-        <item>generic</item>
-        <item>tv</item>
-        <item>plus</item>
-        <item>maps</item>
-        <item>primetime</item>
-        <item>youtube</item>
-    </string-array>
-
 </resources>
