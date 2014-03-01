@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageView;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
@@ -14,7 +14,7 @@ import com.actionbarsherlock.view.MenuItem;
 
 public class DevInfo extends SherlockActivity {
 
-    private Button webbtn;
+    private ImageView webbtn;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,7 +23,7 @@ public class DevInfo extends SherlockActivity {
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        webbtn = (Button) findViewById(R.id.devinfo_webbtn);
+        webbtn = (ImageView) findViewById(R.id.devinfo_webbtn);
         webbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

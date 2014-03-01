@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.proinlab.gdlapp"
-    android:versionCode="12"
-    android:versionName="1.0.8" >
+    android:versionCode="13"
+    android:versionName="1.0.9" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -29,7 +29,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Schedule" />
         <activity
             android:name=".Contents"
             android:configChanges="keyboardHidden|orientation|screenSize"

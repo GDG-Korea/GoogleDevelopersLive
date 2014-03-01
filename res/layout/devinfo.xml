@@ -15,8 +15,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="10dp"
-        android:text="Open Source Project" />
+        android:layout_margin="20dp"
+        android:text="GDLive is OpenSource Project that started at gdgkr-organizers.\nThis application is able to watch Google Developers Live page&apos;s youtube movie and scheduled programs.\n\nI made public this project at github.\nhttps://github.com/proin/GoogleDevelopersLive\n\nplease, report bug at github.\nAnd any requests are welcomed! (translation, adding functions ..)" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -24,11 +24,11 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp" >
 
-        <Button
+        <ImageView
             android:id="@+id/devinfo_webbtn"
-            android:layout_width="100dp"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:text="GitHub" />
+            android:src="@drawable/github_button" />
     </LinearLayout>
 
 </LinearLayout>

@@ -3,12 +3,6 @@
     <item
         android:id="@+id/menu_developer"
         android:orderInCategory="100"
-        android:showAsAction="never"
+        android:showAsAction="always" android:icon="@drawable/action_about"
         android:title="@string/menu_developre"/>
-    <item
-        android:id="@+id/menu_schedule"
-        android:icon="@drawable/action_bar_schedule"
-        android:orderInCategory="100"
-        android:showAsAction="always"
-        android:title="@string/menu_schedule"/>
 </menu>
